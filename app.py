@@ -1,10 +1,42 @@
 #!/usr/bin/env python3
 
-"""
-Example flask-based web application.
-See the README.md file for instructions how to set up and run the app in development mode.
-"""
+from flask import Flask, render_template, request, redirect, url_for
 
+def create_app():
+    """
+    Create and configure the Flask application.
+    returns: app: the Flask application object
+    """
+    app = Flask(__name__)
+
+    @app.route("/")
+    def home():
+        """
+        Route for the home page.
+        Returns:
+            rendered template (str): The rendered HTML template.
+        """
+        return render_template("base.html", title="Home")
+    
+    @app.route("/search")
+    def search():
+        """
+        Route for the search page.
+        Returns:
+            rendered template (str): The rendered HTML template.
+        """
+        return render_template("search.html", title="Search")
+
+    return app
+
+app = create_app()
+if __name__ == "__main__":
+    app.run(port=3000)
+
+
+
+
+'''
 import os
 import datetime
 from flask import Flask, render_template, request, redirect, url_for
@@ -150,3 +182,4 @@ if __name__ == "__main__":
     print(f"FLASK_ENV: {FLASK_ENV}, FLASK_PORT: {FLASK_PORT}")
 
     app.run(port=FLASK_PORT)
+'''
