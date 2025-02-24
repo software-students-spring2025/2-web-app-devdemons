@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html> 
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/> -->
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
     <link rel="stylesheet" href="../static/css/style.css"/>
-    <!--<script defer src="{{ url_for('static', filename='script.js') }}"></script>-->
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
     <script defer src="../static/js/script.js"></script>
   </head>
 
@@ -18,16 +18,21 @@
         <div class="bar"></div>
         <div class="bar"></div>
       </button>
-      <h1 id = "title">App Website here</h1>
-      <!--<img src="{{ url_for('static', filename='images/user.svg') }}" alt="Profile Icon" class="profileIcon">-->
-      <img src="../images/user.svg" alt="Profile Icon" id="profileIcon">
+      <h1 id ="title">{% block header %} {% endblock %}</h1>
+      <a href="{{ url_for('search') }}" id="profileLink">
+        <img src="{{ url_for('static', filename='images/user.svg') }}" alt="Profile Icon" class="profileIcon">
+      </a>
     </div>
 
     <div id="menu">
-      <a href="{{ url_for('myPlaces')}}">My Places</a>
-      <a href="{{ url_for('search')}}">Search Places</a>
-      <a href="{{ url_for('discover')}}">Discover</a>
+      <a href="{{ url_for('search') }}">My Places</a>
+      <a href="{{ url_for('search') }}">Search Places</a>
+      <a href="{{ url_for('search') }}">Discover</a>
     </div>
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
 
   </body>
 </html>
