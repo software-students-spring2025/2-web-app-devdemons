@@ -1,5 +1,5 @@
 .container {
-  border: 2px solid;
+  border: 2px solid #28536B;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -7,9 +7,10 @@
 header {
   display: flex;
   flex-direction: row;
-  gap: 10em; /* space between elements in the row */
-  justify-content: space-between; /* align along the flex direction */
-  align-items: center; /* align across the flex direction */
+  gap: 10em;
+  justify-content: space-between; 
+  align-items: center; 
+  background-color: #C2948A;
 }
 
 header,
@@ -20,7 +21,7 @@ main {
 
 header,
 main {
-  border-bottom: 2px solid;
+  border-bottom: 2px solid #28536B;
   margin-bottom: 5px;
 }
 
@@ -32,22 +33,55 @@ section.posts {
 }
 
 article.post {
-  border: 1px solid black;
+  border: 1px solid #28536B;
   padding: 1rem;
+  background-color: #7EAB8E;
 }
+
 article.post.new-post {
-  background-color: #f0f0f0;
+  background-color: #F6F0ED;
 }
-article.post .controls {
-  font-size: 12px;
-}
+
+article.post .controls,
 article.post .author {
   font-size: 12px;
+  color: #BBB193;
 }
+
 article.post p.message {
   font-size: 24px;
+  color: #28536B;
 }
 
 footer {
+  background-color: #C2948A;
+  color: #28536b;
   margin-bottom: 5px;
 }
+
+.dropdown {
+  background-color: #BBB193; 
+  color: #28536b; 
+  border: 1px solid #F6F0ED; 
+  padding: 5px 10px;
+  border-radius: 5px;
+  outline: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+.dropdown option {
+  color: #28536b; 
+  background-color: #BBB193; 
+}
+
+.dropdown option:hover, .dropdown option:focus {
+  background-color: #28536B; 
+  color: #F6F0ED; 
+}
+
+.dropdown option:checked, .dropdown option:selected {
+  background-color: #7EAB8E; 
+  color: #28536B; 
+}
+

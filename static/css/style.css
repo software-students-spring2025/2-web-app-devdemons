@@ -9,13 +9,14 @@
    left: 0;
    width: 100%;
    height: 75px;
-   background-color: #00ffff;
+   background-color: #C2948A; 
 }
 
 #title {
    font-size: 30px;
    text-align: center;
    flex-grow: 1;
+   color: #28536B; 
 }
 
 #menuBtn {
@@ -29,9 +30,9 @@
 .bar {
    width: 30px;
    height: 5px;
-   background-color: black;
+   background-color: #28536B; 
    margin: 6px 0;
- }
+}
 
 .profileIcon {
    width: 42px;
@@ -56,18 +57,17 @@
    height: 100vh;
    padding-top: 100px;
    transition: left 0.3s linear;
-   background-color: grey;
+   background-color: #7EA8BE; 
 }
 
 #menu.open {
    left: 0;
-   background-color: grey;
 }
 
-#menu a{
+#menu a {
    display: block;
    font-size: 22px;
-   color: black;
+   color: #28536B; 
    text-decoration: none;
    padding: 20px;
    text-align: center;
@@ -75,9 +75,8 @@
 }
 
 #menu a:hover {
-   background-color: lightcyan;
+   background-color: #F6F0ED; 
 }
-
 
 /* styling for the search page*/
 #searchContainer {
@@ -91,7 +90,7 @@
 #searchInput {
    width: 300px;
    height: 40px;
-   border: 2px solid black;
+   border: 2px solid #28536B; 
    border-radius: 5px;
    font-size: 14px;
 }
@@ -99,6 +98,7 @@
 #advancedHeader {
    font-size: 19px;
    text-align: center;
+   color: #28536B; 
 }
 
 #filterSection {
@@ -130,19 +130,204 @@
    font-weight: bold;
    cursor: pointer;
    font-size: 14px;
+   background-color: #7EA8BE; 
 }
 
 .searchBtn:hover {
-   background-color: grey;
+   background-color: #C2948A; 
 }
 
 label {
    font-size: 18px;
+   color: #28536B; 
 }
 
 select {
    width: 130px;
-   border: 2px solid black;
+   border: 2px solid #28536B; 
    height: 30px;
    border-radius: 5px;
 }
+
+/* Styling for creating a new post form and edit page */
+h2 {
+   color: #28536B; 
+   text-align: center;
+   padding-top: 100px; 
+ }
+ 
+ form {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding: 20px;
+ }
+ 
+ input[type="text"], textarea {
+   width: 90%; 
+   padding: 10px;
+   margin-bottom: 10px; 
+   border: 2px solid #28536B; 
+   border-radius: 5px;
+   font-size: 16px;
+ }
+ 
+ textarea {
+   height: 120px; 
+ }
+ 
+ input[type="submit"] {
+   width: 100px;
+   padding: 10px;
+   border: none;
+   border-radius: 5px;
+   background-color: #7EA8BE; 
+   color: white; 
+   cursor: pointer;
+   font-weight: bold;
+   transition: background-color 0.3s;
+ }
+ 
+ input[type="submit"]:hover {
+   background-color: #C2948A; 
+ }
+
+ /* Styling for the posts section */
+h2 {
+   color: #28536B; 
+   text-align: center;
+   padding-top: 100px; 
+ }
+ 
+ section.posts {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 1rem;
+   width: 90%; 
+   margin: 0 auto;
+ }
+ 
+ article.post {
+   border: 1px solid #28536B;
+   padding: 1rem;
+   width: 100%; 
+   background-color: #BBB193; 
+   margin-bottom: 1rem; 
+ }
+ 
+ article.post.new-post {
+   background-color: #F6F0ED;
+ }
+ 
+ article.post .controls {
+   font-size: 12px; 
+   color: #28536B; 
+   display: flex;
+   justify-content: flex-end; 
+ }
+ 
+ article.post .controls a {
+   color: #C2948A; 
+   text-decoration: none; 
+   margin-left: 10px; 
+ }
+ 
+ article.post .controls a:hover {
+   text-decoration: underline; 
+   font-size: medium;
+ }
+ 
+ article.post p.author {
+   font-size: 16px;
+   color: #28536B; 
+ }
+ 
+ article.post p.message {
+   font-size: 18px;
+   color: #28536B;
+   margin-top: 5px; 
+ }
+
+ /* Styling for the search page */
+#searchContainer {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding-top: 100px;
+   padding-bottom: 20px;
+   width: 90%; 
+   margin: 0 auto; 
+}
+
+#searchInput {
+   width: 300px; 
+   padding: 10px;
+   margin-bottom: 10px;
+   border: 2px solid #28536B; 
+   border-radius: 5px;
+   font-size: 16px; 
+}
+
+h3#advancedHeader {
+   color: #28536B; 
+   text-align: center;
+   margin: 20px 0;
+}
+
+#filterSection {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 15px;
+   width: 100%; 
+}
+
+.filterItem {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+   width: 90%; 
+   padding: 10px;
+   border: 1px solid #28536B; 
+   border-radius: 5px;
+}
+
+label {
+   font-size: 16px; 
+   color: #28536B; 
+}
+
+select {
+   width: 200px; 
+   padding: 5px;
+   border: 2px solid #28536B;
+   border-radius: 5px;
+   font-size: 14px;
+   color: #28536B; 
+   background-color: #F6F0ED; 
+}
+
+.submitDiv {
+   display: flex;
+   justify-content: center;
+   margin-top: 20px;
+}
+
+.searchBtn {
+   padding: 10px 20px; 
+   border: none;
+   border-radius: 5px;
+   background-color: #7EA8BE; 
+   color: white; 
+   cursor: pointer;
+   font-size: 16px;
+   font-weight: bold;
+}
+
+.searchBtn:hover {
+   background-color: #C2948A; 
+}
+
+ 
