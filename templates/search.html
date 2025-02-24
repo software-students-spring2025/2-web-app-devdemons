@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Search{% endblock %}
+{% block header %}Search{% endblock %}
+
+{% block content %}
+   <div id="searchContainer">
+     <form action="#" method="GET">
+         <input type="text" id="searchInput" name="query" placeholder="Enter Search...">
+         <h3 id="advancedHeader">Advanced Filters</h3>
+         <div id="filterSection">
+            <div class="filterItem">
+               <label for="price">Price</label>
+               <select id="price" name="price">
+                  <option value="" selected>Any Price</option>
+                  <option value="Economy">Economy ($)</option>
+                  <option value="Affordable">Affordable ($$)</option>
+                  <option value="Standard">Standard ($$$)</option>
+                  <option value="Premium">Premium ($$$$)</option>
+                  <option value="Luxury">Luxury ($$$$$)</option>
+               </select>
+            </div>
+
+            <div class="filterItem">
+               <label for="rating">Rating</label>
+               <select id="rating" name="rating">
+                  <option value="" selected>Any Rating</option>
+                  <option value="1">1 Star</option>
+                  <option value="2">2 Stars</option>
+                  <option value="3">3 Stars</option>
+                  <option value="4">4 Stars</option>
+                  <option value="5">5 Stars</option>
+               </select>
+            </div>
+         </div>
+         <div class="submitDiv"><button type="submit" value="submit" class="searchBtn">Search</button></div>
+     </form>
+   </div>
+{% endblock %}
