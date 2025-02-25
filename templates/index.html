@@ -1,41 +1,19 @@
-<!DOCTYPE html>
-<html> 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} {% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
-    <link rel="stylesheet" href="../static/css/style.css"/>
-    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
-    <script defer src="../static/js/script.js"></script>
-  </head>
 {% extends 'base.html' %}
 
-{% block container %}
+{% block title %}Login{% endblock %}
+{% block header %}Login{% endblock %}
 
-    <h2>Posts</h2>
-    <section class="posts">
-
-        <article class="post new-post">
-            {% include '_new_post_form.html' %}
-        </article>
-
-        {% for doc in docs %}
-        <article class="post">
-            <nav class="controls">
-                <a href="{{ url_for('edit', post_id=doc._id)}}">Edit</a> | <a href="{{ url_for('delete', post_id=doc._id)}}">Delete</a>
-            </nav>
-            <p class="author">
-                {{doc.name}} at {{ doc.created_at.strftime("%H:%M on %d %B %Y") }}
-            </p>
-            <p class="message">
-                {{ doc.message }}
-            </p>
-        </article>
-        {%endfor%}
-
-    </section>
-
+{% block content %}
+<div class="login-container">
+    <h2>Please login to your account:</h2>
+    <form id="loginForm" method="POST" action="{{ url_for('index') }}">
+        <input type="text" id="username" name="username" placeholder="Username" required>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+    
+    {% if error %}
+    <p id="message" style="color: red;">{{ error }}</p>
+    {% endif %}
+</div>
 {% endblock %}
-
-</html>
