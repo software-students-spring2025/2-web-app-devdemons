@@ -3,9 +3,10 @@ import re
 
 def load_parks():
     '''
-    Loading our National Park collection into our MongoDB database from a csv file
+    Loading our National Park collection from a csv file and returning a dictionary that is ready to be uploaded into MongoDB
     The csv is sourced from https://www.kaggle.com/datasets/thedevastator/the-united-states-national-parks/data which is  licensed as public 
     The data on whether each park has an entrance fee comes from https://www.nps.gov/aboutus/entrance-fee-prices.htm?park=&state=&entrancePassRequired=&timedEntry=&page=1&parking=
+    Park images found from https://www.nps.gov/media/multimedia-search.htm#sort=score+desc&q= 
     For future reference the associated images for each park are stored in the static/images folder with the name being park_name.
     '''
     src = 'static/db/national_parks.csv'
@@ -13,6 +14,8 @@ def load_parks():
     headers = next(file)
     headers = [headers[1], headers[3],headers[5], headers[7],headers[8]]
     parks = [[l[1], l[3],l[5], l[7],l[8]] for l in file]
+
+    db_parks = []
 
     for p in parks: #loading a json style object that then can be put into mongoDB once thats set up 
         p_name, p_state, p_size, desc, fee = p
@@ -26,8 +29,8 @@ def load_parks():
                 'size': p_size,
                 'fee': bool(fee)}
         
-        # adding to mongodb
-        # db.national_parks.insert_one(park)
+        db_parks.append(park)
+        return db_parks
 
 if __name__ == "__main__":
     load_parks()
