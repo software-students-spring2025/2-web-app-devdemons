@@ -22,15 +22,21 @@ def load_parks():
         state = re.match('([a-zA-Z\s.&]*?)[\d]', p_state)[1]
 
         if '&' in state:
-            state=state.replace('&', ', ')
+            state = state.replace('&', ', ')
+        if '*' in p_name:
+            p_name = p_name.replace('*', '')
 
-        park = {'name':p_name,
+        p_name = p_name.strip()
+        p_img = p_name.replace('.','').replace(' ','')+'.jpg'
+
+        park = {'park_name':p_name,
                 'state':state,
                 'size': p_size,
-                'fee': bool(fee)}
+                'entrance_fee': bool(fee),
+                'img_src':p_img}
         
         db_parks.append(park)
-        return db_parks
+    return db_parks
 
 if __name__ == "__main__":
     load_parks()
