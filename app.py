@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, make_response
+import pymongo
+import os
+from bson.objectid import ObjectId
 
 def create_app():
     """
@@ -26,22 +29,113 @@ def create_app():
             rendered template (str): The rendered HTML template.
         """
         return render_template("search.html", title="Search")
+    
+    @app.route("/discover")
+    def discover():
+        """
+        Route for the discover page.
+        Returns:
+            rendered template (str): The rendered HTML template.
+        """
+        return render_template("discover.html", title="Discover")
+    
+    @app.route("/my-parks/visited")
+    def visited():
+        """
+        Route for the visited parks page.
+        Returns:
+            rendered template (str): The rendered HTML template.
+        """
+        return render_template("my_parks_visited.html")
+    
+    @app.route("/my-parks/liked")
+    def liked():
+        """
+        Route for the liked parks page.
+        Returns:
+            rendered template (str): The rendered HTML template.
+        """
+        return render_template("my_parks_liked.html")
+    
+    @app.route("/my-parks/add-park")
+    def addPark():
+        """
+        Route for the adding a park page.
+        Returns:
+            rendered template (str): The rendered HTML template.
+        """
+        return render_template("add_park.html")
+    
+    @app.route("/my-parks/make-public/<park_id>")
+    def makePublic(park_id):
+        """
+        Route for making a park rating public.
+        Returns:
+            rendered template (str): The rendered HTML template.
+        """
+        return redirect(url_for("visited"))
 
+    @app.route("/my-parks/make-private/<park_id>")
+    def makePrivate(park_id):
+        """
+        Route for making a park rating private.
+        Returns:
+            rendered template (str): The rendered HTML template.
+        """
+        return redirect(url_for("visited"))
+    
+    @app.route("/my-parks/edit/<park_id>")
+    def edit(park_id):
+        """
+        Route for GET requests to the edit page.
+        Displays a form users can fill out to edit an existing record.
+        Args:
+            park_id (str): The ID of the park rating it to edit.
+        Returns:
+            rendered template (str): The rendered HTML template.
+        """
+        # doc = db.messages.find_one({"_id": ObjectId(park_id)})
+        return render_template("edit.html")
+    
+    @app.route("/my-parks/delete/<park_id>")
+    def delete(park_id):
+        """
+        Route for GET requests to the delete page.
+        Deletes the specified record from the database, and then redirects the browser to the home page.
+        Args:
+            park_id (str): The ID of the park rating id to delete.
+        Returns:
+            redirect (Response): A redirect response to the home page.
+        """
+        # db.messages.delete_one({"_id": ObjectId(park_id)})
+        return redirect(url_for("visited"))
+    
+    @app.errorhandler(Exception)
+    def handle_error(e):
+        """
+        Output any errors - good for debugging.
+        Args:
+            e (Exception): The exception object.
+        Returns:
+            rendered template (str): The rendered HTML template.
+        """
+        return render_template("error.html", error=e)
     return app
 
 app = create_app()
+
 if __name__ == "__main__":
-    app.run(port=3000)
+    FLASK_PORT = os.getenv("FLASK_PORT", "5000")
+    FLASK_ENV = os.getenv("FLASK_ENV")
+    print(f"FLASK_ENV: {FLASK_ENV}, FLASK_PORT: {FLASK_PORT}")
 
-
+    app.run(port=FLASK_PORT)
 
 
 '''
-import os
 import datetime
 from flask import Flask, render_template, request, redirect, url_for
 import pymongo
-from bson.objectid import ObjectId
 from dotenv import load_dotenv, dotenv_values
 
 load_dotenv()  # load environment variables from .env file
@@ -159,27 +253,4 @@ def create_app():
         """
         db.messages.delete_many({"name": post_name, "message": post_message})
         return redirect(url_for("home"))
-
-    @app.errorhandler(Exception)
-    def handle_error(e):
-        """
-        Output any errors - good for debugging.
-        Args:
-            e (Exception): The exception object.
-        Returns:
-            rendered template (str): The rendered HTML template.
-        """
-        return render_template("error.html", error=e)
-
-    return app
-
-
-app = create_app()
-
-if __name__ == "__main__":
-    FLASK_PORT = os.getenv("FLASK_PORT", "5000")
-    FLASK_ENV = os.getenv("FLASK_ENV")
-    print(f"FLASK_ENV: {FLASK_ENV}, FLASK_PORT: {FLASK_PORT}")
-
-    app.run(port=FLASK_PORT)
 '''
