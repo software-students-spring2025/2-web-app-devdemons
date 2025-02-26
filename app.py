@@ -12,14 +12,23 @@ def create_app():
     """
     app = Flask(__name__)
 
-    @app.route("/")
-    def home():
+    @app.route("/", methods=["GET", "POST"])
+    def index():
         """
-        Route for the home page.
-        Returns:
-            rendered template (str): The rendered HTML template.
+        Route for the home page, which is the login page.
         """
-        return render_template("base.html", title="Home")
+        if request.method == "POST":
+            username = request.form.get("username")
+            password = request.form.get("password")
+
+            # Example authentication logic
+            if username == "admin" and password == "password123":  
+                return redirect(url_for("visited"))  # Redirect if login successful
+            
+            return render_template("index.html", error="Invalid credentials")  # Show error
+
+        return render_template("index.html")  # Show login page (GET request)
+
     
     @app.route("/search")
     def search():
@@ -64,7 +73,7 @@ def create_app():
         Returns:
             rendered template (str): The rendered HTML template.
         """
-        return render_template("add_park.html")
+        return render_template("add_visited_park.html")
     
     @app.route("/my-parks/make-public/<park_id>")
     def makePublic(park_id):

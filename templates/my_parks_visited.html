@@ -6,50 +6,54 @@
 {% block content %}
     <section class="my-parks">
         <div class="profile">Your Profile</div>
+    
+        <div id="parkListContainer">
+            <h2>National Parks I have visted:</h2>
+            <a href="{{ url_for('addPark') }}">+ Add a Park I have Visited</a>
+            <br>
+            <br>           
+            <ol class="park-list">
+                <li class="my-park">
+                    <div id="park-name"><b>Yellowstone National Park</b></div>
+                    <div id="park-info"> Wyoming</div>
+                    <div id="park-info"> <b>Entrance Fee:</b> $150 </div>
+                    <div id="park-info"> <b>Rating:</b>5 stars </div>
+                    <div id="park-info"> <b>Like:</b>Yes </div>
+                    <div id="comment"><b>Comment:</b>The most beautiful place on Earth - had a wonderful vacation with family</div>
+                    <div id="commands">
+                        <a href="">Edit</a> | 
+                        <a href="">Delete</a> |                                    
+                    </div>                 
+                </li><br><br>
+                <li class="my-park">
+                    <div id="park-name">Yosemite National Park</div>
+                    <div id="park-info"> California</div>
+                    <div id="park-info"> <b>Entrance Fee:</b> $150 </div>
+                    <div id="park-info"> <b>Rating:</b>5 stars </div>
+                    <div id="park-info"> <b>Like:</b>Yes </div>
+                    <div id="comment"><b>Comment:</b>The most beautiful place on Earth - had a wonderful vacation with family</div>
+                    <div id="commands">
+                        <a href="">Edit</a> | 
+                        <a href="">Delete</a> |                                    
+                    </div>                 
+                </li>
+                {% for doc in docs %}
+                <li class="my-park">
+                    <div id="park-name"><b>{{ doc.park_name }}</b></div>
+                    <div id="park-info"> {{ doc.state }}</div>
+                    <div id="park-info"> <b>Entrance Fee:</b> {{ doc.entrance_fee }} </div>
+                    <div id="park-info"> <b>Rating:</b>{{ doc.rating }} </div>
+                    <div id="park-info"> <b>Like:</b>{{ doc.like }} </div>
+                    <div id="comment"><b>Comment:</b><p>{{ doc.comment }}</p></div>
+                    <div id="commands">
+                        <a href="{{ url_for('edit', park_id=doc._id) }}">Edit</a> | 
+                        <a href="{{ url_for('delete', park_id=doc._id) }}">Delete</a>                                    
+                    </div>                 
+                </li>
+                {% endfor %}
 
-        <nav class="tabs">
-            <a href="{{ url_for('visited') }}">Visited Parks</a>
-            <a href="{{ url_for('liked') }}">Liked Parks</a>
-        </nav>
-        
-        <div id="searchContainer">
-            <p class="search-description">🔍 Search for a park by name or state:</p>
-            <form action="#" method="GET">
-                <input type="text" id="searchInput" name="query" placeholder="e.g. Yellowstone National Park">
-                <h3 id="search-by">Search By</h3>
-                <select id="search-by-value" name="search-by-value">
-                    <option value="State">State</option>
-                    <option value="Name">Name</option>
-                  </select>
-                <div class="submitDiv">
-                    <button type="submit" value="submit" class="searchBtn">Search</button>
-                </div>
-            </form>
-        </div>
-      
-        <a href="{{ url_for('addPark') }}">+ Add a Park You've Visited</a>
-
+            </ul>
+        </div>        
     </section>
-
-    {% for doc in docs %}
-    <div class="park-rating">
-        <p class="park-name">
-            {{ doc.park_name }}
-        </p>
-        <p> {{ doc.state }}</p>
-        <p> Size of Park: {{ doc.size }} </p>
-        <p> Rating: {{ doc.rating }} </p>
-        <p> Comments: {{ doc.comment }} </p>
-        <p>
-            <a href="{{ url_for('edit', park_id=doc._id) }}">Edit</a> | 
-            <a href="{{ url_for('delete', park_id=doc._id) }}">Delete</a> | 
-            {% if doc.is_public %}
-                <a href="{{ url_for('makePrivate', park_id=doc._id) }}">Make Private</a>
-            {% else %}
-                <a href="{{ url_for('makePublic', park_id=doc._id) }}">Make Public</a>
-            {% endif %}
-        </p>
-    </div>
-    {% endfor %}
-
+   
 {% endblock %}
