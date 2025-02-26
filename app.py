@@ -73,7 +73,7 @@ def create_app():
         Returns:
             rendered template (str): The rendered HTML template.
         """
-        return render_template("add_park.html")
+        return render_template("add_visited_park.html")
     
     @app.route("/my-parks/make-public/<park_id>")
     def makePublic(park_id):
