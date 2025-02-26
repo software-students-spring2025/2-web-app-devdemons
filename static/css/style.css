@@ -330,4 +330,73 @@ select {
    background-color: #C2948A; 
 }
 
- 
+
+#searchContainer {
+   width: 90%;
+   margin: 20px auto;
+   padding: 20px;
+   background-color: #F6F0ED;
+   border-radius: 8px;
+   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.search-description {
+   font-size: 16px;
+   color: #28536B;
+   margin-bottom: 10px;
+}
+
+#searchInput, #search-by-value {
+   width: 100%;
+   padding: 10px;
+   margin-bottom: 10px;
+   border: 2px solid #28536B;
+   border-radius: 5px;
+}
+
+.submitDiv {
+   text-align: center;
+}
+
+.searchBtn {
+   color: #FFF;
+   background-color: #28536B;
+   border: none;
+   padding: 10px 20px;
+   border-radius: 5px;
+   cursor: pointer;
+   transition: background-color 0.3s;
+}
+
+.searchBtn:hover {
+   background-color: #C2948A;
+} 
+
+/* Park Ratings Section */
+.park-rating {
+   width: 90%;
+   margin: 20px auto;
+   padding: 10px;
+   background-color: #BBB193;
+   border-radius: 5px;
+   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.park-name {
+   font-size: 20px;
+   color: #28536B;
+}
+
+.park-rating p {
+   margin: 5px 0;
+   color: #28536B;
+}
+
+.park-rating a {
+   color: #C2948A;
+   text-decoration: none;
+}
+
+.park-rating a:hover {
+   text-decoration: underline;
+}
