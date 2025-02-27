@@ -1,26 +1,26 @@
 {% extends 'base.html' %}
 
-{% block title %}My National Parks - Visited{% endblock %}
+{% block title %}Add a Visited Park{% endblock %}
 {% block header %}My National Parks{% endblock %}
 
 {% block content %}
     <section class="my-parks">
-        <div class="profile">Your Profile</div>
-
-        <h1>Add a park you have visted</h1>
+        
         <div id="searchContainer">
+            <h2>I am user: {{ user_id }}</h2>
+
             <h2>Add a National Park I have visted:</h2>
             <p>Please find the park by name or state:</p>
-            <form action="#" method="GET">
-                <input type="text" id="searchInput" name="query" placeholder="e.g. Yellowstone National Park">
+            <form method="POST" action="{{ url_for('searchVisitedPark', user_id=user_id) }}" >
+                <input type="text" id="searchInput" name="searchInput" placeholder="e.g. Yellowstone National Park" required>
                 <p3 id="search-by">Search by:
-                <input type="radio" id="by_name" name="by_name" value="by_state">
+                <input type="radio" id="by_name" name="searchType" value="by_name" checked="checked">
                     <label for="by_name">name</label>
-                <input type="radio" id="by_state" name="by_state" value="by_name">
+                <input type="radio" id="by_state" name="searchType" value="by_state">
                     <label for="by_state">state</label>
                 </p3>  
                 <div class="submitDiv">
-                    <button type="submit" value="submit" class="searchBtn">🔍Search</button>
+                    <button type="submit" value="submit" class="searchBtn">Search</button>
                 </div>
             </form>
         </div>

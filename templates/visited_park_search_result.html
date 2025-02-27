@@ -1,0 +1,27 @@
+{% extends 'base-login.html' %}
+
+{% block title %}My National Parks - Visited Park Search Result{% endblock %}
+{% block header %}My National Parks{% endblock %}
+
+{% block content %}
+    {% if not user_id %}
+        <div>User ID not received</div>
+        <h2>Search Results</h2>
+    {% else %}
+        <h2>Search Results {{ user_id }}</h2>
+    {% endif %}
+    
+    {% if docs %}
+        {% for doc in docs %}
+            <div>
+                <hr class="solid">
+                <p><b>{{ doc.park_name }}</b></p>
+                <p><b>State: {{ doc.state }}</b></p>
+                <a href="{{ url_for('addVisitedPark', user_id=user_id, park_id='67c0ab2f54cafebd459c937b') }}">Add to My Visited Parks List</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No parks found matching your search criteria.</p>
+    {% endif %}
+
+{% endblock %}
