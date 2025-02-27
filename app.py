@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-
 from flask import Flask, render_template, request, redirect, url_for, make_response
 import pymongo
 import os
 from bson.objectid import ObjectId
+from dotenv import load_dotenv, dotenv_values
+from db import load_parks
+
+load_dotenv()  # load environment variables from .env file
 
 def create_app():
     """
@@ -11,6 +14,22 @@ def create_app():
     returns: app: the Flask application object
     """
     app = Flask(__name__)
+
+    config = dotenv_values()
+    app.config.from_mapping(config)
+
+    cxn = pymongo.MongoClient(os.getenv("MONGO_URI"))
+    db = cxn[os.getenv("MONGO_DBNAME")]
+
+    try:
+        cxn.admin.command("ping")
+        print(" *", "Connected to MongoDB!")
+    except Exception as e:
+        print(" * MongoDB connection error:", e)
+
+    #loading national parks into our db
+    park_list = load_parks()
+    db.nationalparks.insert(park_list)
 
     @app.route("/", methods=["GET", "POST"])
     def index():
@@ -75,24 +94,6 @@ def create_app():
         """
         return render_template("add_visited_park.html")
     
-    @app.route("/my-parks/make-public/<park_id>")
-    def makePublic(park_id):
-        """
-        Route for making a park rating public.
-        Returns:
-            rendered template (str): The rendered HTML template.
-        """
-        return redirect(url_for("visited"))
-
-    @app.route("/my-parks/make-private/<park_id>")
-    def makePrivate(park_id):
-        """
-        Route for making a park rating private.
-        Returns:
-            rendered template (str): The rendered HTML template.
-        """
-        return redirect(url_for("visited"))
-    
     @app.route("/my-parks/edit/<park_id>")
     def edit(park_id):
         """
@@ -103,7 +104,7 @@ def create_app():
         Returns:
             rendered template (str): The rendered HTML template.
         """
-        # doc = db.messages.find_one({"_id": ObjectId(park_id)})
+        #doc = db.uservisited.find_one({"_id": ObjectId(park_id)})
         return render_template("edit.html")
     
     @app.route("/my-parks/delete/<park_id>")
@@ -116,8 +117,31 @@ def create_app():
         Returns:
             redirect (Response): A redirect response to the home page.
         """
-        # db.messages.delete_one({"_id": ObjectId(park_id)})
+        db.uservisited.delete_one({"_id": ObjectId(park_id)})
         return redirect(url_for("visited"))
+    
+    @app.route("/my-parks/park-information/<park_id>")
+    def park_info(park_id):
+        """
+        Route for GET requests to the park information page.
+        Displays a list of information about the park and a link to add it to their visited page
+        Args:
+            park_id (str): The ID of the park rating it to edit.
+        Returns:
+            rendered template (str): The rendered HTML template.
+        """
+
+        doc = db.nationalparks.find_one({'park_id': park_id})
+        user_input = db.uservisited.find({'park_id': park_id})
+        doc['rating'] = 0
+        doc['like'] = 0
+        doc['comment'] = []
+        for d in user_input:
+            doc['rating'] += d['rating']
+            doc['like'] += 1 if d['liked'] else 0
+            doc['comment'].append(d['comment'])
+        doc['rating'] /= len(user_input)
+        return render_template("park_information.html", docs = doc)
     
     @app.errorhandler(Exception)
     def handle_error(e):
