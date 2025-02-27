@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %} Park Information {% endblock %}
+{% block header %} Park Information {% endblock %}
+
+{% block content %}
+
+<section class="searchContainer">
+    <div class="profile">Your Profile</div>
+    <div id="parkListContainer">
+        <h2>Park Information</h2>
+        <div id="park-name"><b>{{ docs.park_name }}</b></div>
+        <div id="park-info"> {{ docs.state }}</div>
+        <img src="static/images/parks{{docs.img}}" id="park-img"></img>
+        <div id="park-info"> <b>Entrance Fee:</b> {{ docs.entrance_fee }} </div>
+        <div id="park-info"> <b>Rating:</b>{{ doc.rating }} </div>
+        <div id="park-info"> <b>Like:</b>{{ doc.like }} </div>
+        <div id=""><a  href="{{ url_for('like')}}">Like this Park</a></div>
+        <div id=""><a  href="{{ url_for('addPark', park_id=docs._id) }}">Add to Parks I've Visited</a></div>
+        <div id="comment"><b>Comment:</b><p>{{ doc.comment }}</p></div>
+    </div>
+</section>
+{% endblock %}
