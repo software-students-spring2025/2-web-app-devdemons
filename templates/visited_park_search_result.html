@@ -1,4 +1,4 @@
-{% extends 'base-login.html' %}
+{% extends 'base.html' %}
 
 {% block title %}My National Parks - Visited Park Search Result{% endblock %}
 {% block header %}My National Parks{% endblock %}
@@ -17,7 +17,7 @@
                 <hr class="solid">
                 <p><b>{{ doc.park_name }}</b></p>
                 <p><b>State: {{ doc.state }}</b></p>
-                <a href="{{ url_for('addVisitedPark', user_id=user_id, park_id='67c0ab2f54cafebd459c937b') }}">Add to My Visited Parks List</a>
+                <a href="{{ url_for('addVisitedPark', user_id=user_id, park_id=doc._id) }}">Add to My Visited Parks List</a>
             </div>
         {% endfor %}
     {% else %}

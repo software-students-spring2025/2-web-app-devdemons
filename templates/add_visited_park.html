@@ -7,9 +7,7 @@
     <section class="my-parks">
         
         <div id="searchContainer">
-            <h2>I am user: {{ user_id }}</h2>
-
-            <h2>Add a National Park I have visted:</h2>
+            <h2>Add a National Park I have visited:</h2>
             <p>Please find the park by name or state:</p>
             <form method="POST" action="{{ url_for('searchVisitedPark', user_id=user_id) }}" >
                 <input type="text" id="searchInput" name="searchInput" placeholder="e.g. Yellowstone National Park" required>

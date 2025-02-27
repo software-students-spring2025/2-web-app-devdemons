@@ -189,14 +189,17 @@ def create_app():
         
         app.logger.debug("* addVisitedPark(): user_id: %s, park_id: %s", user_id, park_id)
 
-        doc = db.user_visited_parks.find_one({"user_id": user_id, "park_id": park_id})
+        # Check if there is an existing user_visited_park record for this user and park
+        # User might have liked the park before, but not visited it
+        doc = db.user_parks.find_one({"user_id": user_id, "park_id": park_id})
         if doc:
             if (doc.get("visited") != "true"):
                 app.logger.debug("* addVisitedPark(): Found 1 doc: %s", doc)
-                db.user_visited_parks.update_one({"_id": ObjectId(doc["_id"])},
+                db.user_parks.update_one({"_id": ObjectId(doc["_id"])},
                                                  {"$set": {"visited": "true"}})   
                 app.logger.debug("* addVisitedPark(): Updated this doc")
             else:
+                # Don't do anything if the user has already visited the park
                 app.logger.debug("* addVisitedPark(): Error - Found 1 doc but already visited: %s", doc)
         else:
             # Add a new user_visited_park record to the database
@@ -209,13 +212,20 @@ def create_app():
                 "liked": "false",
                 "created_at": datetime.datetime.utcnow(),
             }
-            newdoc = db.user_visited_parks.insert_one(doc)
+            newdoc = db.user_parks.insert_one(doc)
             app.logger.debug("* addVisitedPark(): Inserted 1 doc: %s", newdoc.inserted_id)
 
-        user_docs = list(db.user_visited_parks.find({"user_id": user_id}).sort("created_at", -1))
-        app.logger.debug("* addVisitedPark(): Found user_docs: %s", user_docs)
+        visited_docs = list(db.user_parks.find({"user_id": user_id, "visited": "true"}).sort("created_at", -1))
+        for vdoc in visited_docs:
+            park_doc = db.national_parks.find_one({"_id": ObjectId(vdoc["park_id"])})
+            app.logger.debug("* addVisitedPark(): Found park_doc: %s", park_doc)
+            vdoc["park_name"] = park_doc["park_name"]
+            vdoc["state"] = park_doc["state"]
+            vdoc["img_src"] = park_doc["img_src"]
+            app.logger.debug("* addVisitedPark(): Enriched visited_park_doc: %s", vdoc)
+        app.logger.debug("* addVisitedPark(): Found visited park docs: %s", visited_docs)
         # Redirect to the visited_parks page with all of user's visited parks
-        return render_template("my_parks_visited.html", user_id=user_id, is_new_user="false", docs=user_docs)
+        return render_template("my_parks_visited.html", user_id=user_id, is_new_user="false", docs=visited_docs)
         
     
     @app.route("/edit/<park_id>")
