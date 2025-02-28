@@ -118,6 +118,25 @@ def create_app():
         Returns:
             rendered template (str): The rendered HTML template.
         """
+        
+        # filter for parks that have been liked and group by the park id to get total like count
+        top_liked = list(db.user_parks.aggregate([
+            {"$match": {"liked":"true"}},
+            {"$group": {"_id": "$park_id", "num_likes": {"$sum": 1}}},
+            {"$sort": {"num_likes": -1}},
+            {"$limit": 5}
+        ]))
+        app.logger.debug("* discover(): Found most liked parks: %s", top_liked)
+
+        # add missing fields
+        for park in top_liked:
+            park_doc = db.national_parks.find_one({"_id": ObjectId(park["_id"])})
+            park["park_name"] = park_doc["park_name"]
+            park["state"] = park_doc["state"]
+        
+        app.logger.debug("* discover(): added fields to top liked parks: %s", top_liked)
+
+    
         return render_template("discover.html", title="Discover")
     
     @app.route("/visited")
