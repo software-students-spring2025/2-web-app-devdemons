@@ -400,3 +400,45 @@ select {
 .park-rating a:hover {
    text-decoration: underline;
 }
+
+/* styling for discover page */
+#discoverContainer {
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+   align-items: center;
+}
+
+.discoverItem {
+   text-align: center;
+   width: 50%;
+   padding: 25px;
+   border-radius: 15px;
+   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.topParkHeader {
+   height: 20px;
+   padding-top: 70px;
+   font-size: 25px;
+   color: #28536B; 
+   font-weight: bold;
+}
+
+.listParks {
+   display: flex;
+   flex-direction: column;
+   font-size: 19px;
+}
+
+.listParks a {
+   text-decoration: none;
+   border: 5px black;
+   padding: 10px;
+   border-bottom: 1px solid grey;
+   color: #28536B; ;
+}
+
+.listParks a:hover {
+   color: darkgray;
+}
