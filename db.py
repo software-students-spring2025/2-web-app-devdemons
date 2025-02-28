@@ -2,6 +2,10 @@ import csv
 import re
 import datetime
 
+def clean_size(size_string):
+    km_part = size_string.split("(")
+    return km_part[1].split()[0].replace(",", "")
+
 def load_parks():
     '''
     Loading our National Park collection from a csv file and returning a dictionary that is ready to be uploaded into MongoDB
@@ -30,10 +34,11 @@ def load_parks():
 
                 p_name = p_name.strip()
                 p_img = 'images/parks/'+p_name.replace('.','').replace(' ','')+'.jpg'
+                p_size = clean_size(p_size)
 
                 park = {'park_name':p_name,
                         'state':state,
-                        'size': p_size,
+                        'size': float(p_size),
                         'entrance_fee': bool(fee),
                         'description': desc,
                         'img_src':p_img}
