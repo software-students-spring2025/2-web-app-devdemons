@@ -39,10 +39,19 @@ def create_app():
         db[collection].drop()
 
     # Load park data into the database
-    data = parkData.load_parks()
-    app.logger.debug("create_app(): data: %s", data)
+    pdata = parkData.load_parks()
+    app.logger.debug("create_app(): data: %s", pdata)
     national_parks = db["national_parks"]
-    result = national_parks.insert_many(data)
+    result = national_parks.insert_many(pdata)    
+    
+    # Load user data into the database
+    udata = parkData.generate_test_users()
+    app.logger.debug("create_app(): users: %s", udata)
+    result = db.users.insert_many(udata)
+
+    vdata = parkData.generate_test_visited(users=db.users.find(), parks=national_parks.find())
+    app.logger.debug("create_app(): visite: %s", vdata)  
+    result = db.user_parks.insert_many(vdata)
 
     @app.route("/", methods=["GET", "POST"])
     def index():
@@ -280,7 +289,7 @@ def create_app():
         #     doc['like'] += 1 if d['liked'] else 0
         #     doc['comment'].append(d['comment'])
         # doc['rating'] /= len(user_input)
-        return render_template("park_information.html", docs = doc)
+        return render_template("park_information.html", docs = doc, uid = user_id)
     
     @app.errorhandler(Exception)
     def handle_error(e):

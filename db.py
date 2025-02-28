@@ -1,5 +1,6 @@
 import csv
 import re
+import datetime
 
 def load_parks():
     '''
@@ -34,6 +35,7 @@ def load_parks():
                         'state':state,
                         'size': p_size,
                         'entrance_fee': bool(fee),
+                        'description': desc,
                         'img_src':p_img}
                 
                 db_parks.append(park)
@@ -47,6 +49,50 @@ def load_parks():
         print(f"An unexpected error occurred: {e}")
     return db_parks
 
+def generate_test_users():
+    user = ['test1', 'test2', 'test3', 'test4', 'test5']
+    pwd = ['helloworld', 'password', '12345678', 'softwareeng', 'nationalparks']
+    return [{'username': u, 'password': p,"created_at": datetime.datetime.utcnow()} for u,p in zip(user,pwd)]
+
+def generate_test_visited(users,parks):
+    '''{
+            _id: ObjectId('67c1f4bc4ee22593c868addc'),
+            user_id: '67c1f4b74ee22593c868addb',
+            park_id: '67c1f4aa85e2e604261ecddd',
+            visited: 'true',
+            rating: 'Not rated',
+            comment: '',
+            liked: 'false',
+            created_at: ISODate('2025-02-28T17:39:08.798Z')
+    }'''
+    uidx =   [0, 0,1, 1, 1,2,2, 3,4, 4, 4, 4]
+    pidx =   [0,20,3,15,3,0,60,5,20,60,60,0]
+    ratings = [5, 3,4, 2,3,2, 4,5, 3, 5, 2,3]
+    liked = [True, False, False, True, True, False, False, True, True, True, False, True]
+    comments = ['so fun', 'beautiful', 'great!','too warm', 'enjoyed it','so fun', 'too warm', 'beautiful', 'great!', 'could have been better', 'amazing park', 'i had so much fun!']
+    
+    visited_docs = []
+    for v in range(len(comments)):
+        visited_docs.append({
+            'user_id': users[uidx[v]]['_id'],
+            'park_id': parks[pidx[v]]['_id'],
+            'visited': 'true',
+            'rating':ratings[v],
+            'comment':comments[v],
+            'liked': liked[v],
+            "created_at": datetime.datetime.utcnow()
+        })
+
+    return visited_docs
+
+
+
 if __name__ == "__main__":
     db = load_parks()
     print(db)
+
+
+    users = generate_test_users()
+    print(users)
+
+    print(generate_test_visited(parks=db,users=users))
