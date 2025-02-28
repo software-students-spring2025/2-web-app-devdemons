@@ -10,33 +10,43 @@ def load_parks():
     For future reference the associated images for each park are stored in the static/images folder with the name being park_name.
     '''
     src = 'static/db/national_parks.csv'
-    file = csv.reader(open(src,'r'))
-    headers = next(file)
-    headers = [headers[1], headers[3],headers[5], headers[7],headers[8]]
-    parks = [[l[1], l[3],l[5], l[7],l[8]] for l in file]
-
     db_parks = []
+    try:
+        with open(src, "r") as src_file:
+            file = csv.reader(src_file)
+            headers = next(file)
+            headers = [headers[1], headers[3],headers[5], headers[7],headers[8]]
+            parks = [[l[1], l[3],l[5], l[7],l[8]] for l in file]
 
-    for p in parks: #loading a json style object that then can be put into mongoDB once thats set up 
-        p_name, p_state, p_size, desc, fee = p
-        state = re.match('([a-zA-Z\s.&]*?)[\d]', p_state)[1]
+            for p in parks: #loading a json style object that then can be put into mongoDB once thats set up 
+                p_name, p_state, p_size, desc, fee = p
+                state = re.match('([a-zA-Z\s.&]*?)[\d]', p_state)[1]
 
-        if '&' in state:
-            state = state.replace('&', ', ')
-        if '*' in p_name:
-            p_name = p_name.replace('*', '')
+                if '&' in state:
+                    state = state.replace('&', ', ')
+                if '*' in p_name:
+                    p_name = p_name.replace('*', '')
 
-        p_name = p_name.strip()
-        p_img = p_name.replace('.','').replace(' ','')+'.jpg'
+                p_name = p_name.strip()
+                p_img = p_name.replace('.','').replace(' ','')+'.jpg'
 
-        park = {'park_name':p_name,
-                'state':state,
-                'size': p_size,
-                'entrance_fee': bool(fee),
-                'img_src':p_img}
-        
-        db_parks.append(park)
+                park = {'park_name':p_name,
+                        'state':state,
+                        'size': p_size,
+                        'entrance_fee': bool(fee),
+                        'img_src':p_img}
+                
+                db_parks.append(park)
+    except FileNotFoundError:
+        print("Error: File not found.")
+    except PermissionError:
+        print("Error: Permission denied.")
+    except IOError:
+        print("Error: An I/O error occurred.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
     return db_parks
 
 if __name__ == "__main__":
-    load_parks()
+    db = load_parks()
+    print(db)
