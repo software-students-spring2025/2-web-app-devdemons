@@ -137,16 +137,34 @@ def create_app():
         ]))
         app.logger.debug("* discover(): Found most liked parks: %s", top_liked)
 
-        # add missing fields
+        # add missing fields to top liked parks
         for park in top_liked:
             park_doc = db.national_parks.find_one({"_id": ObjectId(park["_id"])})
             park["park_name"] = park_doc["park_name"]
             park["state"] = park_doc["state"]
-        
         app.logger.debug("* discover(): added fields to top liked parks: %s", top_liked)
 
-    
-        return render_template("discover.html", title="Discover")
+        # filter for parks that are top rated and group by average rating
+        top_rated = list(db.user_parks.aggregate([
+            {"$match": {"rating": {"$ne": "Not rated"}}},
+            {"$group": {"_id": "$park_id", "avg_rating": {"$avg": {"$convert": {"input": "$rating", "to": "double"}}}}},
+            {"$sort": {"avg_rating": -1}},
+            {"$limit": 5}
+        ]))
+        app.logger.debug("* discover(): Found top rated parks: %s", top_rated)
+
+        # add missing fields to top rated parks
+        for park in top_rated:
+            park_doc = db.national_parks.find_one({"_id": ObjectId(park["_id"])})
+            park["park_name"] = park_doc["park_name"]
+            park["state"] = park_doc["state"]
+        app.logger.debug("* discover(): added fields to top rated parks: %s", top_rated)
+
+        # filter parks by largest
+        largest_parks = list(db.national_parks.find().sort("size", -1).limit(5))
+        app.logger.debug("* discover(): found largest parks")
+
+        return render_template("discover.html", title="Discover", top_liked_parks = top_liked, top_rated_parks = top_rated, largest_parks = largest_parks)
     
     @app.route("/visited")
     def visited():
