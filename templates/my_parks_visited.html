@@ -21,7 +21,7 @@
                     <ul>                       
                         {% for doc in docs %}
                             <li>
-                                <a href="{{ url_for('park', park_id=doc.id) }}">
+                                <a href="{{ url_for('park_info', park_id=doc.id) }}">
                                     <h3>{{ doc.park_name }}</h3>
                                 </a>
                                 <p>State: {{ doc.state }}</p>
