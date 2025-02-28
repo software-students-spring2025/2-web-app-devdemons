@@ -11,7 +11,7 @@
             <h2>Add a National Park I have visited:</h2>
             <p>Please find the park by name or state:</p>
             <form method="POST" action="{{ url_for('searchVisitedPark', user_id=user_id) }}" >
-                <input type="text" id="searchInput" name="searchInput" placeholder="e.g. Yellowstone National Park" required>
+                <input type="text" id="searchInput" name="searchInput" placeholder="e.g. Yellowstone" required>
                 <p3 id="search-by">Search by:
                 <input type="radio" id="by_name" name="searchType" value="by_name" checked="checked">
                     <label for="by_name">name</label>

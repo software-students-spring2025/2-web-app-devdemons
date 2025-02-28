@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock %}</title>
     <script defer src="{{ url_for('static', filename='script.js') }}"></script>
-    <link rel="stylesheet" href="../static/css/style.css"/>
-    <script defer src="../static/js/script.js"></script>
+    <!-- <link rel="stylesheet" href="../static/css/style.css"/> -->
+    <!-- <script defer src="../static/js/script.js"></script> -->
+    <script defer src="{{ url_for('static', filename='/js/script.js') }}"></script>
   </head>
 
   <body>
@@ -24,8 +25,8 @@
     </div>
 
     <div id="menu">
-      <a href="{{ url_for('visited') }}">My National Parks</a>
-      <a href="{{ url_for('search') }}">Search Parks</a>
+      <a href="{{ url_for('visited', user_id=user_id) }}">My National Parks</a>
+      <a href="{{ url_for('addPark', user_id=user_id) }}">Add a National Park I've Visited</a>
       <a href="{{ url_for('discover') }}">Discover</a>
     </div>
 
