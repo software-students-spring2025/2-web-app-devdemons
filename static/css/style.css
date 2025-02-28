@@ -400,3 +400,164 @@ select {
 .park-rating a:hover {
    text-decoration: underline;
 }
+
+.submitBtn {
+   padding: 10px 20px;           
+   background-color: #7EA8BE;    
+   color: #FFF;                 
+   border: none;                
+   border-radius: 5px;          
+   cursor: pointer;              
+   font-size: 16px;             
+   font-weight: bold;          
+   transition: background-color 0.3s; 
+}
+
+.submitBtn:hover {
+   background-color: #C2948A;   
+}
+
+/* Container for the login form */
+.login-container {
+   background: white;
+   border: #C2948A;
+   padding: 40px;
+   border-radius: 8px;
+   width: 90%;
+}
+
+.login-container h2 {
+   color: #28536B;
+   margin-bottom: 20px;
+}
+
+/* Styling for the form elements */
+
+#loginForm input[type="text"],
+#loginForm input[type="password"] {
+   padding: 10px;
+   margin-bottom: 15px;
+   border: 2px solid #ddd;
+   border-radius: 5px;
+   font-size: 16px;
+}
+
+#loginForm button {
+   padding: 10px 20px;           
+   background-color: #7EA8BE;    
+   color: #FFF;                 
+   border: none;                
+   border-radius: 5px;          
+   cursor: pointer;              
+   font-size: 16px;             
+   font-weight: bold;          
+   transition: background-color 0.3s; 
+}
+
+#loginForm button:hover {
+   background-color: #C2948A;   
+}
+
+/* Link to create a new account */
+.login-container h3 a {
+   display: inline-block;
+   margin-top: 20px;
+   color: #7EA8BE;
+   text-decoration: none;
+}
+
+.login-container h3 a:hover {
+   text-decoration: underline;
+}
+
+/* Error message styles */
+#message {
+   color: red;
+   text-align: center;
+   margin-top: 20px;
+}
+
+/* General styles for the My National Parks section */
+.my-parks {
+   padding: 20px;
+   background-color: #f0f4f8;
+   border-radius: 8px;
+   width: 90%;
+   max-width: 800px;
+   margin: 20px auto;
+}
+
+#parkListContainer {
+   padding: 15px;
+   background-color: #ffffff;
+   border-radius: 5px;
+}
+
+#parkListContainer h2, #parkListContainer h3 {
+   color: #28536B;
+   text-align: center;
+}
+
+#parkListContainer p {
+   color: #666;
+   text-align: center;
+   margin-top: 5px;
+}
+
+#parkListContainer ul {
+   list-style-type: none;
+   padding: 0;
+}
+
+#parkListContainer li {
+   background-color: #eef2f5;
+   padding: 10px;
+   margin-bottom: 10px;
+   border-radius: 5px;
+}
+
+#parkListContainer a {
+   color: #5c67f2;
+   text-decoration: none;
+   font-weight: bold;
+}
+
+#parkListContainer a:hover {
+   text-decoration: underline;
+}
+
+#parkListContainer li h3 {
+   color: #333;
+   margin-bottom: 5px;
+}
+
+.add-park-link {
+   display: block;
+   width: fit-content;
+   margin: 10px auto;
+   padding: 10px 20px;
+   background-color: #5c67f2;
+   color: white;
+   text-align: center;
+   border-radius: 5px;
+   text-decoration: none;
+}
+
+.add-park-link:hover {
+   background-color: #4a54e1;
+}
+
+/* Message for new or returning users */
+.welcome-message {
+   text-align: center;
+   font-size: 16px;
+   color: #333;
+   margin-bottom: 20px;
+}
+
+/* Error or notification messages */
+.notice-message {
+   text-align: center;
+   color: red;
+   font-weight: bold;
+}
