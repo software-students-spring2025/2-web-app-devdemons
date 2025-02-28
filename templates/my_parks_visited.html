@@ -4,21 +4,20 @@
 {% block header %}My National Parks{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="../static/css/style.css"/>
     <section class="my-parks">
-        <div id="searchContainer">
+        <div id="parkListContainer">
             {% if not user_id %}
                 <div>User ID not received</div>
             {% elif is_new_user == 'true' %}
                 <h2>Welcome to the National Parks App!</h2><br>
-                <p align="center"><a href="{{ url_for('addPark', user_id=user_id) }}">+ Add a Park I have Visited</a></p>
+                <p><a href="{{ url_for('addPark', user_id=user_id) }}">+ Add a Park I have Visited</a></p>
                 <h3>Have you visited any National Park?<br><br>
                     Click the link above to add a park you have visited,<br>
                     or click the menu bar at the top to explore National Parks.</h3>
             {% else %}
                 <br>
                 <h2>National Parks I have visited:</h2>
-                <p align="center"><a href="{{ url_for('addPark', user_id=user_id) }}">+ Add a Park I have Visited</a></p>
+                <p><a href="{{ url_for('addPark', user_id=user_id) }}">+ Add a Park I have Visited</a></p>
                 <br>
                 {% if docs and docs|length > 0 %}                       
                     {% for doc in docs %}
@@ -41,7 +40,7 @@
                         </div>
                     {% endfor %}
                 {% else %}
-                    <h3>Have you visited any National Park yet?<br>
+                    <h3>Have you visited any National Park?<br>
                     Click the link above to add a park you have visited<br> 
                     or click the menu bar at the top to explore National Parks.</h3>    
                 {% endif %}                

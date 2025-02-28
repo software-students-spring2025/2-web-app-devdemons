@@ -18,7 +18,7 @@
                 <p><b>Login Name*:</b>
                     <input type="text" id="username" name="username" placeholder="at least 4 characters long" required>
                 </p>
-                <p><b>Password*:</b
+                <p><b>Password*:</b>
                     <Password>
                         <input type="text" id="password" name="password" placeholder="at least 4 characters long" required>
                     </Password>
@@ -29,12 +29,12 @@
                     </Password>
                 </p>
                 <div class="submitDiv">
-                    <button type="submit" value="submit" class="searchBtn">Submit</button>
+                    <button type="submit" value="submit" class="submitBtn">Submit</button>
                 </div>
             </form>
 
             {% if error %}
-                <p id="message" style="color: red;">{{ error }}</p>
+                <p id="message">{{ error }}</p>
             {% endif %}
         </div>
     </section>
