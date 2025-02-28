@@ -238,7 +238,7 @@ def create_app():
         Returns:
             rendered template (str): The rendered HTML template.
         """
-        # doc = db.messages.find_one({"_id": ObjectId(park_id)})
+        #doc = db.uservisited.find_one({"_id": ObjectId(park_id)})
         return render_template("edit.html")
     
     @app.route("/delete/<park_id>")
@@ -251,13 +251,36 @@ def create_app():
         Returns:
             redirect (Response): A redirect response to the home page.
         """
-        # db.messages.delete_one({"_id": ObjectId(park_id)})
+        db.uservisited.delete_one({"_id": ObjectId(park_id)})
         return redirect(url_for("visited"))
     
     @app.route("/park/<park_id>")
     def park(park_id):
         
         return render_template("index.html")
+    
+    @app.route("/my-parks/park-information/<park_id>")
+    def park_info(park_id):
+        """
+        Route for GET requests to the park information page.
+        Displays a list of information about the park and a link to add it to their visited page
+        Args:
+            park_id (str): The ID of the park rating it to edit.
+        Returns:
+            rendered template (str): The rendered HTML template.
+        """
+        doc = national_parks.find_one({"_id": ObjectId(park_id)})
+        app.logger.debug("* parkInformation(): Found park_doc: %s", doc)
+        # user_input = db.uservisited.find({'park_id': park_id})
+        # doc['rating']= 4.2
+        # doc['like'] = 100
+        # doc['comment'] = 'commentingggg'
+        # for d in user_input:
+        #     doc['rating'] += d['rating']
+        #     doc['like'] += 1 if d['liked'] else 0
+        #     doc['comment'].append(d['comment'])
+        # doc['rating'] /= len(user_input)
+        return render_template("park_information.html", docs = doc)
     
     @app.errorhandler(Exception)
     def handle_error(e):

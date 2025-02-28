@@ -28,7 +28,7 @@ def load_parks():
                     p_name = p_name.replace('*', '')
 
                 p_name = p_name.strip()
-                p_img = p_name.replace('.','').replace(' ','')+'.jpg'
+                p_img = 'images/parks/'+p_name.replace('.','').replace(' ','')+'.jpg'
 
                 park = {'park_name':p_name,
                         'state':state,
