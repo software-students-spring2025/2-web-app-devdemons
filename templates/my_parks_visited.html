@@ -4,38 +4,43 @@
 {% block header %}My National Parks{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="../static/css/style.css"/>
     <section class="my-parks">
         <div id="parkListContainer">
             {% if not user_id %}
                 <div>User ID not received</div>
             {% elif is_new_user == 'true' %}
-                <h3>User ID received: {{ user_id }}, {{ is_new_user }}</h3>
                 <h2>Welcome to the National Parks App!</h2><br>
-                <p align="center"><a href="{{ url_for('addPark', user_id=user_id) }}">+ Add a Park I have Visited</a></p>
+                <p><a href="{{ url_for('addPark', user_id=user_id) }}">+ Add a Park I have Visited</a></p>
+                <h3>Have you visited any National Park?<br><br>
+                    Click the link above to add a park you have visited,<br>
+                    or click the menu bar at the top to explore National Parks.</h3>
             {% else %}
-                <h3>User ID received: {{ user_id }}</h3>
-                <h3>National Parks I have visited:</h3>
-                <p align="center"><a href="{{ url_for('addPark', user_id=user_id) }}">+ Add a Park I have Visited</a></p>
                 <br>
-                {% if docs and docs|length > 0 %}
-                    <ul>                       
-                        {% for doc in docs %}
-                            <li>
-                                <a href="{{ url_for('park_info', park_id=doc.id) }}">
-                                    <h3>{{ doc.park_name }}</h3>
-                                </a>
-                                <p>State: {{ doc.state }}</p>
-                                <p>Rating: {{ doc.rating }}</p>
-                                <p>Like: {{ doc.like }}</p>
-                                <p>Comment: {{ doc.comment }}</p>
-                                <a href="{{ url_for('edit', park_id=doc.id) }}">Edit</a>
-                                <a href="{{ url_for('delete', park_id=doc.id) }}">Delete</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                <h2>National Parks I have visited:</h2>
+                <p><a href="{{ url_for('addPark', user_id=user_id) }}">+ Add a Park I have Visited</a></p>
+                <br>
+                {% if docs and docs|length > 0 %}                       
+                    {% for doc in docs %}
+                        <div class="park">
+                            <p><a href="{{ url_for('park', park_id=doc.park_id) }}">
+                                <b>{{ doc.park_name }}</b>
+                            </a></p>
+                            <p>State: {{ doc.state }}</p>
+                            <p>Rating: {{ doc.rating }}</p>
+                            {% if doc.liked == 'true' %}
+                                <p>Like: Yes</p>
+                            {% else %}
+                                <p>Like: No</p>
+                            {% endif %}
+                            <p>Comment: {{ doc.comment }}</p>
+                            <p><a href="{{ url_for('edit', user_id=user_id, park_id=doc.park_id) }}"><b>Edit</b></a>
+                                &nbsp;&nbsp;&nbsp;
+                                <a href="{{ url_for('delete', user_id=user_id, park_id=doc.park_id) }}"><b>Delete</b></a>
+                            </p>
+                        </div>
+                    {% endfor %}
                 {% else %}
-                    <h3>Have you visited any National Park yet?<br>
+                    <h3>Have you visited any National Park?<br>
                     Click the link above to add a park you have visited<br> 
                     or click the menu bar at the top to explore National Parks.</h3>    
                 {% endif %}                

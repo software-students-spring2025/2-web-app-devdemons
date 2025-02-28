@@ -1,24 +1,83 @@
-<!DOCTYPE html>
-<html> 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} {% endblock %}</title>
-    <link rel="stylesheet" href="../static/css/style.css"/>
-    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
-    <script defer src="../static/js/script.js"></script>
-  </head>
-    {% extends 'base.html' %} 
+{% extends 'base.html' %}
 
-    {% block container %}
-    <h2>Update</h2>
-    <p>Edit a record in the MongoDB database collection.</p>
-    <form method="POST" action="{{ url_for('edit_post', post_id=doc._id) }}">
-        <input type="text" id="fname" name="fname" value="{{doc.name}}" placeholder="Your name"/>
-        <br />
-        <textarea id="fmessage" name="fmessage" placeholder="Message">{{doc.message}}</textarea>
-        <br />
-        <input type="submit" value="Save" />
-    </form>
-    {% endblock %}
-</html>
+{% block title %}Review a National Park{% endblock %}
+{% block header %}Review a National Park{% endblock %}
+
+{% block content %}
+    <section class="my-parks">
+        <div>
+            <h2>Enter or modify the rating, like status, and comment of a park I visited:</h2>
+            <form method="POST" action="{{ url_for('editVisitedPark', user_id=user_id, park_id=park_id) }}" >
+              <p><b>{{ doc.park_name }}</b></p>
+              <p><b>State:</b> {{ doc.state }}</p>
+              <p><b>Rating:</b>
+              <label for="rating1">1</label>
+              {% if doc.rating == "1" %}
+                <input type="radio" id="rating1" name="rating" value="1" checked>
+              {% else %}
+                <input type="radio" id="rating1" name="rating" value="1">
+              {% endif %}
+
+              &nbsp;&nbsp;
+
+              <label for="rating2">2</label>
+              {% if doc.rating == "2" %}
+                <input type="radio" id="rating2" name="rating" value="2" checked>
+              {% else %}
+                <input type="radio" id="rating2" name="rating" value="2">
+              {% endif %}
+
+              &nbsp;&nbsp;
+
+              <label for="rating3">3</label>
+              {% if doc.rating == "3" %}
+                <input type="radio" id="rating3" name="rating" value="3" checked>
+              {% else %}
+                <input type="radio" id="rating3" name="rating" value="3">
+              {% endif %}
+              
+              &nbsp;&nbsp;
+
+              <label for="rating4">4</label>
+              {% if doc.rating == "4" %}
+                <input type="radio" id="rating4" name="rating" value="4" checked>
+              {% else %}
+                <input type="radio" id="rating4" name="rating" value="4">
+              {% endif %}
+
+              &nbsp;&nbsp;
+
+              <label for="rating5">5</label>
+              {% if doc.rating == "5" %}
+                <input type="radio" id="rating5" name="rating" value="5" checked>
+              {% else %}
+                <input type="radio" id="rating5" name="rating" value="5">
+              {% endif %}
+            </p>
+
+            <p><b>Liked:</b>
+              {% if doc.liked == 'true' %}
+                <label for="liked">Yes</label>
+                  <input type="radio" id="like" name="liked" value="Yes" checked>
+                <label for="liked">No</label>
+                  <input type="radio" id="like" name="liked" value="No">
+              {% else %}
+                <label for="liked">Yes</label>
+                  <input type="radio" id="like" name="liked" value="Yes">
+                <label for="liked">No</label>
+                  <input type="radio" id="like" name="liked" value="No" checked>
+              {% endif %}
+            </p>
+
+            <p><b>My Comment:</b> 
+              &nbsp;&nbsp;
+              <textarea cols="50" rows="5" type="text" id="comment" name="comment">{{doc.comment}}</textarea>
+            </p>
+            <div class="submitDiv">
+                <button type="submit" value="submit" class="searchBtn">Save</button>
+            </div>
+          </form>
+        </div>
+    </section>
+
+{% endblock %}

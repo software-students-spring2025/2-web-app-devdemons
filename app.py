@@ -62,14 +62,18 @@ def create_app():
             username = request.form.get("username")
             password = request.form.get("password")
 
-            # Example authentication logic
-            if username == "admin" and password == "password123":  
-                return redirect(url_for("visited"))  # Redirect if login successful
-            else: 
-                doc = db.users.find_one({"username": username, "password": password})
+            # Authentication logic
+            if username and password:
+                app.logger.debug("* index(): Authenticating user: %s", username)
+                doc = db.users.find_one({"username": username})
                 if doc:
-                    return redirect(url_for("visited"), user_id=doc["_id"])  # Redirect if login successful
-            return render_template("index.html", error="Failed to login: Invalid credentials")  # Show error
+                    if doc["password"] == password:
+                        app.logger.debug("* index(): User authenticated: %s", username)
+                        return redirect(url_for("visited", user_id=doc["_id"]))  # Redirect if login successful
+                    else:
+                        return render_template("index.html", error="Failed to login: Invalid credentials")
+                else:
+                    return render_template("index.html", error="Failed to login: User not found. Please create a new user account")  # Show error
 
         return render_template("index.html")  # Show login page (GET request)
 
@@ -166,14 +170,30 @@ def create_app():
 
         return render_template("discover.html", title="Discover", top_liked_parks = top_liked, top_rated_parks = top_rated, largest_parks = largest_parks)
     
-    @app.route("/visited")
-    def visited():
+    @app.route("/visited/<user_id>")
+    def visited(user_id):
         """
         Route for the visited parks page.
         Returns:
             rendered template (str): The rendered HTML template.
         """
-        return render_template("my_parks_visited.html")
+        app.logger.debug("* visited(): user_id: %s", user_id)
+        visited_docs = list(db.user_parks.find({"user_id": user_id, "visited": "true"}).sort("created_at", -1))
+        if (visited_docs == []):
+            app.logger.debug("* visited(): No visited parks found for user_id: %s", user_id)
+        else:
+            for vdoc in visited_docs:
+                park_doc = db.national_parks.find_one({"_id": ObjectId(vdoc["park_id"])})
+                app.logger.debug("* addVisitedPark(): Found park_doc: %s", park_doc)
+                vdoc["park_name"] = park_doc["park_name"]
+                vdoc["state"] = park_doc["state"]
+                vdoc["img_src"] = park_doc["img_src"]
+                app.logger.debug("* addVisitedPark(): Enriched visited_park_doc: %s", vdoc)
+            app.logger.debug("* addVisitedPark(): Found visited park docs: %s", visited_docs)
+
+        # Redirect to the visited_parks page with all of user's visited parks
+        return render_template("my_parks_visited.html", user_id=user_id, is_new_user="false", docs=visited_docs)
+    
     
     # @app.route("/liked")
     # def liked():
@@ -187,7 +207,7 @@ def create_app():
     @app.route("/add-park/<user_id>")
     def addPark(user_id):
         """
-        Route for the adding a visited park page.
+        Route for the initial search page of adding a visited park.
         Returns:
             rendered template (str): The rendered HTML template.
         """
@@ -231,7 +251,7 @@ def create_app():
             rendered template (str): The rendered HTML template.
         """
         if not user_id or not park_id:
-            return render_template("add_visited_park.html", error="Failed to add visited park: Missing required fields")
+            return render_template("error.html", error="Failed to add visited park: Missing required fields")
         
         app.logger.debug("* addVisitedPark(): user_id: %s, park_id: %s", user_id, park_id)
 
@@ -242,7 +262,7 @@ def create_app():
             if (doc.get("visited") != "true"):
                 app.logger.debug("* addVisitedPark(): Found 1 doc: %s", doc)
                 db.user_parks.update_one({"_id": ObjectId(doc["_id"])},
-                                                 {"$set": {"visited": "true"}})   
+                                         {"$set": {"visited": "true"}})   
                 app.logger.debug("* addVisitedPark(): Updated this doc")
             else:
                 # Don't do anything if the user has already visited the park
@@ -261,34 +281,81 @@ def create_app():
             newdoc = db.user_parks.insert_one(doc)
             app.logger.debug("* addVisitedPark(): Inserted 1 doc: %s", newdoc.inserted_id)
 
-        visited_docs = list(db.user_parks.find({"user_id": user_id, "visited": "true"}).sort("created_at", -1))
-        for vdoc in visited_docs:
-            park_doc = db.national_parks.find_one({"_id": ObjectId(vdoc["park_id"])})
-            app.logger.debug("* addVisitedPark(): Found park_doc: %s", park_doc)
-            vdoc["park_name"] = park_doc["park_name"]
-            vdoc["state"] = park_doc["state"]
-            vdoc["img_src"] = park_doc["img_src"]
-            app.logger.debug("* addVisitedPark(): Enriched visited_park_doc: %s", vdoc)
-        app.logger.debug("* addVisitedPark(): Found visited park docs: %s", visited_docs)
-        # Redirect to the visited_parks page with all of user's visited parks
-        return render_template("my_parks_visited.html", user_id=user_id, is_new_user="false", docs=visited_docs)
-        
+        return redirect(url_for("visited", user_id=user_id))
     
-    @app.route("/edit/<park_id>")
-    def edit(park_id):
+    
+    @app.route("/edit/<user_id>/<park_id>")
+    def edit(user_id, park_id):
         """
-        Route for GET requests to the edit page.
-        Displays a form users can fill out to edit an existing record.
-        Args:
-            park_id (str): The ID of the park rating it to edit.
+        Route for displaying a form for user to modify comment, rating, like status
+        of a park that the user has visited.
         Returns:
-            rendered template (str): The rendered HTML template.
+            redirect (Response): A redirect response to the my_parks_visited page.
         """
-        #doc = db.uservisited.find_one({"_id": ObjectId(park_id)})
-        return render_template("edit.html")
+        app.logger.debug("* edit(): user_id: %s, park_id: %s", user_id, park_id)
+
+        user_doc = db.user_parks.find_one({"user_id": user_id, "park_id": park_id})
+        app.logger.debug("* edit(): user_doc: %s", user_doc)
+        
+        park_doc = db.national_parks.find_one({"_id": ObjectId(park_id)})
+        app.logger.debug("* edit(): park_doc: %s", park_doc)
+        user_doc["park_name"] = park_doc["park_name"]
+        user_doc["state"] = park_doc["state"]
+        user_doc["img_src"] = park_doc["img_src"]
+        app.logger.debug("* edit(): Enriched user_doc: %s", user_doc)
+        return render_template("edit.html", user_id=user_id, park_id=park_id, doc=user_doc)
     
-    @app.route("/delete/<park_id>")
-    def delete(park_id):
+    @app.route("/edit-visited-park/<user_id>/<park_id>", methods=["POST"])
+    def editVisitedPark(user_id, park_id):
+        """
+        Route updating a user_visited_park record in the database.
+        Returns:
+            redirect (Response): A redirect response to the my_parks_visited page.
+        """
+        if not user_id or not park_id:
+            return render_template("error.html", error="Failed to edit visited park: Missing required fields")
+        
+        app.logger.debug("* editVisitedPark(): user_id: %s, park_id: %s", user_id, park_id)
+
+        user_rating = request.form.get("rating", "").strip()
+        user_liked = request.form.get("liked", "").strip()
+        user_comment = request.form.get("comment", "").strip()
+        app.logger.debug("* editVisitedPark(): user_rating: %s, user_liked: %s, user_comment: %s", user_rating, user_liked, user_comment)
+
+        if user_liked == "Yes":
+            user_liked = "true"
+        else:
+            user_liked = "false"
+
+        # Find the existing user_visited_park record for this user and park
+        doc = db.user_parks.find_one({"user_id": user_id, "park_id": park_id})
+        if doc:
+            app.logger.debug("* addVisitedPark(): Found 1 doc: %s", doc)
+            db.user_parks.update_one({"_id": ObjectId(doc["_id"])},
+                                     {"$set": {"rating": user_rating,
+                                                "comment": user_comment,
+                                                "liked": user_liked,
+                                                "created_at": datetime.datetime.utcnow()}})   
+            app.logger.debug("* editVisitedPark(): Updated this doc")
+        else:
+            app.logger.debug("* editVisitedPark(): Odd, no doc found for this user and park, insert new one")
+            # Should NOT happen, but just in case - Add a new user_visited_park record to the database
+            doc = {
+                "user_id": user_id,
+                "park_id": park_id,
+                "visited": "true",
+                "rating": user_rating,
+                "comment": user_comment,
+                "liked": user_liked,
+                "created_at": datetime.datetime.utcnow(),
+            }
+            newdoc = db.user_parks.insert_one(doc)
+            app.logger.debug("* editVisitedPark(): Inserted 1 doc: %s", newdoc.inserted_id)
+
+        return redirect(url_for("visited", user_id=user_id))
+
+    @app.route("/delete/<user_id>/<park_id>")
+    def delete(user_id, park_id):
         """
         Route for GET requests to the delete page.
         Deletes the specified record from the database, and then redirects the browser to the home page.
@@ -297,8 +364,8 @@ def create_app():
         Returns:
             redirect (Response): A redirect response to the home page.
         """
-        db.uservisited.delete_one({"_id": ObjectId(park_id)})
-        return redirect(url_for("visited"))
+        db.user_parks.delete_one({"user_id": user_id, "park_id": park_id})
+        return redirect(url_for("visited", user_id=user_id))
     
     @app.route("/park/<park_id>")
     def park(park_id):
