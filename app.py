@@ -270,6 +270,7 @@ def create_app():
             rendered template (str): The rendered HTML template.
         """
         doc = national_parks.find_one({"_id": ObjectId(park_id)})
+        app.logger.debug("* parkInformation(): Found park_doc: %s", doc)
         # user_input = db.uservisited.find({'park_id': park_id})
         # doc['rating']= 4.2
         # doc['like'] = 100
