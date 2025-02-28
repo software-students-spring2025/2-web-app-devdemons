@@ -5,11 +5,11 @@ services:
     ports:
       - 10000:5000
     environment:
-      - MONGO_DBNAME=flask-mongodb-web-app-example
-      - MONGO_URI=mongodb://admin:secret@mongodb:27017
+      - MONGO_DBNAME=devdemonsdb
+      - MONGO_URI=mongodb://mdbdevdemons:dd12345@mongodb:27017
       - FLASK_APP=app.py
       - FLASK_ENV=development
-      - FLASK_PORT=10000
+      - FLASK_PORT=5000
     env_file:
       - .env
     depends_on:
@@ -17,8 +17,8 @@ services:
 
   mongodb:
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=secret
+      - MONGO_INITDB_ROOT_USERNAME=mdbdevdemons
+      - MONGO_INITDB_ROOT_PASSWORD=dd12345
     image: mongo
     ports:
       - 27017:27017
