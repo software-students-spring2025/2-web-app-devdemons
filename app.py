@@ -178,7 +178,7 @@ def create_app():
             rendered template (str): The rendered HTML template.
         """
         app.logger.debug("* visited(): user_id: %s", user_id)
-        visited_docs = list(db.user_parks.find({"user_id": user_id, "visited": "true"}).sort("created_at", -1))
+        visited_docs = list(db.user_parks.find({"user_id": ObjectId(user_id), "visited": "true"}).sort("created_at", -1))
         if (visited_docs == []):
             app.logger.debug("* visited(): No visited parks found for user_id: %s", user_id)
         else:
@@ -257,7 +257,7 @@ def create_app():
 
         # Check if there is an existing user_visited_park record for this user and park
         # User might have liked the park before, but not visited it
-        doc = db.user_parks.find_one({"user_id": user_id, "park_id": park_id})
+        doc = db.user_parks.find_one({"user_id": ObjectId(user_id), "park_id": ObjectId(park_id)})
         if doc:
             if (doc.get("visited") != "true"):
                 app.logger.debug("* addVisitedPark(): Found 1 doc: %s", doc)
@@ -270,8 +270,8 @@ def create_app():
         else:
             # Add a new user_visited_park record to the database
             doc = {
-                "user_id": user_id,
-                "park_id": park_id,
+                "user_id": ObjectId(user_id),
+                "park_id": ObjectId(park_id),
                 "visited": "true",
                 "rating": "Not rated",
                 "comment": "",
@@ -294,7 +294,7 @@ def create_app():
         """
         app.logger.debug("* edit(): user_id: %s, park_id: %s", user_id, park_id)
 
-        user_doc = db.user_parks.find_one({"user_id": user_id, "park_id": park_id})
+        user_doc = db.user_parks.find_one({"user_id": ObjectId(user_id), "park_id": ObjectId(park_id)})
         app.logger.debug("* edit(): user_doc: %s", user_doc)
         
         park_doc = db.national_parks.find_one({"_id": ObjectId(park_id)})
@@ -328,7 +328,7 @@ def create_app():
             user_liked = "false"
 
         # Find the existing user_visited_park record for this user and park
-        doc = db.user_parks.find_one({"user_id": user_id, "park_id": park_id})
+        doc = db.user_parks.find_one({"user_id": ObjectId(user_id), "park_id": ObjectId(park_id)})
         if doc:
             app.logger.debug("* addVisitedPark(): Found 1 doc: %s", doc)
             db.user_parks.update_one({"_id": ObjectId(doc["_id"])},
@@ -364,7 +364,7 @@ def create_app():
         Returns:
             redirect (Response): A redirect response to the home page.
         """
-        db.user_parks.delete_one({"user_id": user_id, "park_id": park_id})
+        db.user_parks.delete_one({"user_id": ObjectId(user_id), "park_id": ObjectId(park_id)})
         return redirect(url_for("visited", user_id=user_id))
     
     @app.route("/park/<park_id>")
