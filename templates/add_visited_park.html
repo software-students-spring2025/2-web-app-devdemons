@@ -2,7 +2,6 @@
 
 {% block title %}Add a Visited Park{% endblock %}
 {% block header %}My National Parks{% endblock %}
-<link rel="stylesheet" href="../static/css/style.css"/>
 
 {% block content %}
     <section class="my-parks">
@@ -11,13 +10,13 @@
             <h2>Add a National Park I have visited:</h2>
             <p>Please find the park by name or state:</p>
             <form method="POST" action="{{ url_for('searchVisitedPark', user_id=user_id) }}" >
-                <input type="text" id="searchInput" name="searchInput" placeholder="e.g. Yellowstone National Park" required>
-                <p3 id="search-by">Search by:
+                <input type="text" id="searchInput" name="searchInput" placeholder="e.g. Yellowstone" required>
+                <p id="search-by">Search by:
                 <input type="radio" id="by_name" name="searchType" value="by_name" checked="checked">
                     <label for="by_name">name</label>
                 <input type="radio" id="by_state" name="searchType" value="by_state">
                     <label for="by_state">state</label>
-                </p3>  
+                </p>  
                 <div class="submitDiv">
                     <button type="submit" value="submit" class="searchBtn">Search</button>
                 </div>
