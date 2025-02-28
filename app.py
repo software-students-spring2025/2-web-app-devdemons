@@ -26,10 +26,12 @@ def create_app():
         print(" *", "Connected to MongoDB!")
     except Exception as e:
         print(" * MongoDB connection error:", e)
-
+    
     #loading national parks into our db
+    db.national_parks.remove()
     park_list = load_parks()
-    db.nationalparks.insert(park_list)
+    for p in park_list:
+        db.national_parks.insert_one(p)
 
     @app.route("/", methods=["GET", "POST"])
     def index():
@@ -131,16 +133,17 @@ def create_app():
             rendered template (str): The rendered HTML template.
         """
 
-        doc = db.nationalparks.find_one({'park_id': park_id})
-        user_input = db.uservisited.find({'park_id': park_id})
-        doc['rating'] = 0
-        doc['like'] = 0
-        doc['comment'] = []
-        for d in user_input:
-            doc['rating'] += d['rating']
-            doc['like'] += 1 if d['liked'] else 0
-            doc['comment'].append(d['comment'])
-        doc['rating'] /= len(user_input)
+
+        doc = db.national_parks.find_one({"_id": ObjectId(park_id)})
+        # user_input = db.uservisited.find({'park_id': park_id})
+        # doc['rating']= 4.2
+        # doc['like'] = 100
+        # doc['comment'] = 'commentingggg'
+        # for d in user_input:
+        #     doc['rating'] += d['rating']
+        #     doc['like'] += 1 if d['liked'] else 0
+        #     doc['comment'].append(d['comment'])
+        # doc['rating'] /= len(user_input)
         return render_template("park_information.html", docs = doc)
     
     @app.errorhandler(Exception)
