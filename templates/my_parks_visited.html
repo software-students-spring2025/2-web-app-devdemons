@@ -22,7 +22,7 @@
                 {% if docs and docs|length > 0 %}                       
                     {% for doc in docs %}
                         <div class="park">
-                            <p><a href="{{ url_for('park', park_id=doc.park_id) }}">
+                            <p><a href="{{ url_for('park_info', park_id=doc.park_id) }}">
                                 <b>{{ doc.park_name }}</b>
                             </a></p>
                             <p>State: {{ doc.state }}</p>
@@ -37,6 +37,7 @@
                                 &nbsp;&nbsp;&nbsp;
                                 <a href="{{ url_for('delete', user_id=user_id, park_id=doc.park_id) }}"><b>Delete</b></a>
                             </p>
+                            <hr class="park-hr">
                         </div>
                     {% endfor %}
                 {% else %}
