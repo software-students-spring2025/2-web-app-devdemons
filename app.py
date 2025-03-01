@@ -134,7 +134,7 @@ def create_app():
         
         # filter for parks that have been liked and group by the park id to get total like count
         top_liked = list(db.user_parks.aggregate([
-            {"$match": {"liked":"true"}},
+            {"$match": {"liked": True}},
             {"$group": {"_id": "$park_id", "num_likes": {"$sum": 1}}},
             {"$sort": {"num_likes": -1}},
             {"$limit": 5}
