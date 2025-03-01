@@ -9,7 +9,7 @@
         <div id="searchContainer">
             <h2>Add a National Park I have visited:</h2>
             <p>Please find the park by name or state:</p>
-            <form method="POST" action="{{ url_for('searchVisitedPark', user_id=user_id) }}" >
+            <form method="POST" action="{{ url_for('searchVisitedPark') }}" >
                 <input type="text" id="searchInput" name="searchInput" placeholder="e.g. Yellowstone" required>
                 <p id="search-by">Search by:
                 <input type="radio" id="by_name" name="searchType" value="by_name" checked="checked">

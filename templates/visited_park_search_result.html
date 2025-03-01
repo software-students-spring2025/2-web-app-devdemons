@@ -8,7 +8,7 @@
         <div id="searchContainer">
             <h2>Add a National Park I have visited:</h2>
             <p>Please find the park by name or state:</p>
-            <form method="POST" action="{{ url_for('searchVisitedPark', user_id=user_id) }}" >
+            <form method="POST" action="{{ url_for('searchVisitedPark') }}" >
                 <input type="text" id="searchInput" name="searchInput" placeholder="e.g. Yellowstone" required>
                 <p3 id="search-by">Search by:
                 <input type="radio" id="by_name" name="searchType" value="by_name" checked="checked">
@@ -30,7 +30,7 @@
                             <hr class="solid">
                             <p><b>{{ doc.park_name }}</b></p>
                             <p><b>State: {{ doc.state }}</b></p>
-                            <a href="{{ url_for('addVisitedPark', user_id=user_id, park_id=doc._id) }}">Add to My Visited Parks List</a>
+                            <a href="{{ url_for('addVisitedPark', park_id=doc._id) }}">Add to My Visited Parks List</a>
                         </div>
                     {% endfor %}
                 {% else %}

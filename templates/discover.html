@@ -10,7 +10,7 @@
       <div class = "discoverItem">
          <div class = "listParks">
             {% for park in top_liked_parks %}
-               <a href="/park_info/{{park._id}}">{{park.park_name}}, {{park.state}}</a>
+               <a href="{{ url_for('park_info', park_id = park._id)}}">{{park.park_name}}, {{park.state}}</a>
             {% endfor %}
          </div>
       </div>
@@ -19,7 +19,7 @@
       <div class = "discoverItem">
          <div class = "listParks">
             {% for park in top_rated_parks %}
-               <a href="/park_info/{{park._id}}">{{park.park_name}}, {{park.state}}</a>
+               <a href="{{ url_for('park_info', park_id = park._id)}}">{{park.park_name}}, {{park.state}}</a>
             {% endfor %}
          </div>
       </div>
@@ -28,7 +28,7 @@
       <div class = "discoverItem">
          <div class = "listParks">
             {% for park in largest_parks %}
-            <a href="/park_info/{{park._id}}">{{park.park_name}}, {{park.state}}</a>
+               <a href="{{ url_for('park_info', park_id = park._id)}}">{{park.park_name}}, {{park.state}}</a>
             {% endfor %}
          </div>
       </div>

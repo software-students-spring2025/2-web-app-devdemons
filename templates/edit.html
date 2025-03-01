@@ -7,7 +7,7 @@
     <section class="my-parks">
         <div>
             <h2>Enter or modify the rating, like status, and comment of a park I visited:</h2>
-            <form method="POST" action="{{ url_for('editVisitedPark', user_id=user_id, park_id=park_id) }}" >
+            <form method="POST" action="{{ url_for('editVisitedPark', park_id=park_id) }}" >
               <p><b>{{ doc.park_name }}</b></p>
               <p><b>State:</b> {{ doc.state }}</p>
               <p><b>Rating:</b>

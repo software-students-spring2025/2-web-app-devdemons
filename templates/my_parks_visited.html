@@ -10,14 +10,14 @@
                 <div>User ID not received</div>
             {% elif is_new_user == 'true' %}
                 <h2>Welcome to the National Parks App!</h2><br>
-                <p><a href="{{ url_for('addPark', user_id=user_id) }}">+ Add a Park I have Visited</a></p>
+                <p><a href="{{ url_for('addPark') }}">+ Add a Park I have Visited</a></p>
                 <h3>Have you visited any National Park?<br><br>
                     Click the link above to add a park you have visited,<br>
                     or click the menu bar at the top to explore National Parks.</h3>
             {% else %}
                 <br>
                 <h2>National Parks I have visited:</h2>
-                <p><a href="{{ url_for('addPark', user_id=user_id) }}">+ Add a Park I have Visited</a></p>
+                <p><a href="{{ url_for('addPark') }}">+ Add a Park I have Visited</a></p>
                 <br>
                 {% if docs and docs|length > 0 %}                       
                     {% for doc in docs %}
@@ -33,9 +33,9 @@
                                 <p>Like: No</p>
                             {% endif %}
                             <p>Comment: {{ doc.comment }}</p>
-                            <p><a href="{{ url_for('edit', user_id=user_id, park_id=doc.park_id) }}"><b>Edit</b></a>
+                            <p><a href="{{ url_for('edit', park_id=doc.park_id) }}"><b>Edit</b></a>
                                 &nbsp;&nbsp;&nbsp;
-                                <a href="{{ url_for('delete', user_id=user_id, park_id=doc.park_id) }}"><b>Delete</b></a>
+                                <a href="{{ url_for('delete', park_id=doc.park_id) }}"><b>Delete</b></a>
                             </p>
                             <hr class="park-hr">
                         </div>
