@@ -84,7 +84,7 @@ def generate_test_visited(users,parks):
             'visited': 'true',
             'rating':ratings[v],
             'comment':comments[v],
-            'liked': liked[v],
+            'liked': str(liked[v]).lower(),
             "created_at": datetime.datetime.utcnow()
         })
 

@@ -57,7 +57,7 @@ def create_app():
     result = db.users.insert_many(udata)
 
     vdata = parkData.generate_test_visited(users=db.users.find(), parks=national_parks.find())
-    app.logger.debug("create_app(): visite: %s", vdata)  
+    app.logger.debug("create_app(): visited: %s", vdata)  
     result = db.user_parks.insert_many(vdata)
 
     # class for user login
@@ -395,7 +395,7 @@ def create_app():
                 "user_id": user_id,
                 "park_id": park_id,
                 "visited": "true",
-                "rating": user_rating,
+                "rating": int(user_rating),
                 "comment": user_comment,
                 "liked": user_liked,
                 "created_at": datetime.datetime.utcnow(),
@@ -426,6 +426,7 @@ def create_app():
         
         return redirect(url_for("park_info", park_id = park_id))
     
+
     @app.route("/my-parks/park-information/<park_id>")
     @login_required
     def park_info(park_id):
@@ -438,18 +439,36 @@ def create_app():
             rendered template (str): The rendered HTML template.
         """
         doc = db.national_parks.find_one({"_id": ObjectId(park_id)})
+        if doc is None:
+            return render_template("error.html", error="Failed to find park: incorrect park_id")
+
         app.logger.debug("* parkInformation(): Found park_doc: %s", doc)
-        # user_input = db.uservisited.find({'park_id': park_id})
-        # doc['rating']= 4.2
-        # doc['like'] = 100
-        # doc['comment'] = 'commentingggg'
-        # for d in user_input:
-        #     doc['rating'] += d['rating']
-        #     doc['like'] += 1 if d['liked'] else 0
-        #     doc['comment'].append(d['comment'])
-        # doc['rating'] /= len(user_input)
-        return render_template("park_information.html", docs = doc, uid = current_user.id)
-    
+        user_input = list(db.user_parks.find({'park_id': ObjectId(park_id)}, {'comment': 1, 'liked': 1, 'rating': 1}))
+        app.logger.debug("* parkInformation(): Found user_park docs: %s", user_input)
+
+        doc['comments'] = []
+        doc['likes'] = 0
+        doc['rating'] = 0
+
+        if user_input is not None:
+            mean = 0
+            ct = len(user_input)
+
+            for u in user_input:
+                if u['comment'] != '':
+                    doc['comments'].append(u['comment'])
+                if u['liked'] == 'true':
+                    doc['likes'] += 1
+                if u['rating'] != 'Not rated':
+                    mean += int(u['rating'])
+
+            # Avoid division by zero
+            doc['rating'] = mean / ct if ct > 0 else 0
+
+            app.logger.debug("* parkInformation(): Compiled user info: %s", doc)
+
+        return render_template("park_information.html", docs=doc)
+
     @app.errorhandler(Exception)
     def handle_error(e):
         """
