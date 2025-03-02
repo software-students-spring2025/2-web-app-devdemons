@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock %}</title>
-    <link rel="stylesheet" href="../static/css/style.css"/>
-    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
-    <script defer src="../static/js/script.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+    <script defer src="{{ url_for('static', filename='/js/script.js') }}"></script>
   </head>
 
   <body>
-    <h1>Login</h1>
     {% block content %}
     <div class="login-container">
+        <img class="logo" src="{{ url_for('static', filename='images/ParkPassport.jpg') }}" alt="Park Passport Logo">
+        <h1>Welcome to National Parks App</h1>
         <h2>Please login to your account:</h2>
         <form id="loginForm" method="POST" action="{{ url_for('index') }}">
-            <input type="text" id="username" name="username" placeholder="Username" required>
-            <input type="password" id="password" name="password" placeholder="Password" required>
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
         <h3><a href="{{ url_for('createNewUser') }}">Create a new user account</a></h3>

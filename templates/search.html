@@ -1,40 +1,25 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}Search{% endblock %}
-{% block header %}Search{% endblock %}
+{% block title %}Search for National Parks{% endblock %}
+{% block header %}Search for National Parks{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="../static/css/style.css"/>
-
-   <div id="searchContainer">
-     <form action="#" method="GET">
-         <input type="text" id="searchInput" name="query" placeholder="Enter Search...">
-         <h3 id="advancedHeader">Advanced Filters</h3>
-         <div id="filterSection">
-            <div class="filterItem">
-               <label for="price">Size of Park</label>
-               <select id="price" name="price">
-                  <option value="" selected>Size of Park</option>
-                  <option value="Small">Small</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Large">Large</option>
-                
-               </select>
+   <section class="my-parks">
+         
+      <div id="searchContainer">
+         <h3>Find a park by name or state:</h3>
+         <form method="POST" action="{{ url_for('findParks') }}" >
+            <input type="text" id="searchInput" name="searchInput" placeholder="e.g. Yellowstone" required>
+            <p id="search-by">Search by:
+            <input type="radio" id="by_name" name="searchType" value="by_name" checked="checked">
+                  <label for="by_name">name</label>
+            <input type="radio" id="by_state" name="searchType" value="by_state">
+                  <label for="by_state">state</label>
+            </p>  
+            <div class="submitDiv">
+                  <button type="submit" value="submit" class="searchBtn">Search</button>
             </div>
-
-            <div class="filterItem">
-               <label for="rating">Rating</label>
-               <select id="rating" name="rating">
-                  <option value="" selected>Any Rating</option>
-                  <option value="1">1 Star</option>
-                  <option value="2">2 Stars</option>
-                  <option value="3">3 Stars</option>
-                  <option value="4">4 Stars</option>
-                  <option value="5">5 Stars</option>
-               </select>
-            </div>
-         </div>
-         <div class="submitDiv"><button type="submit" value="submit" class="searchBtn">Search</button></div>
-     </form>
-   </div>
+         </form>
+      </div>
+   </section>
 {% endblock %}

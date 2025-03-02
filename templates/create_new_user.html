@@ -1,11 +1,14 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html> 
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+    <script defer src="{{ url_for('static', filename='/js/script.js') }}"></script>
+  </head>
 
-{% block title %}Register New User{% endblock %}
-{% block header %}Register New User{% endblock %}
-
-{% block content %}
-<link rel="stylesheet" href="../static/css/style.css"/>
-
+  <body>
     <section class="create-new-user">
         <h1>Create New User Account:</h1>
         <div id="createUserContainer">
@@ -26,7 +29,12 @@
                     <button type="submit" class="submitBtn">Submit</button>
                 </div>
             </form>
+
+            {% if error %}
+                <p id="message">{{ error }}</p>
+            {% endif %}
         </div>
     </section>
 
-{% endblock %}
+</body>
+</html>

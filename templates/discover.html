@@ -6,36 +6,30 @@
 
 {% block content %}
    <div id = "discoverContainer">
-      <p class = "topParkHeader">Most Visited Parks</p>
-      <div class = "discoverItem">
-         <div class = "listParks">
-            <a href = "#">Park 1, State</a>
-            <a href = "#">Park 2, State</a>
-            <a href = "#">Park 3, State</a>
-            <a href = "#">Park 4, State</a>
-            <a href = "#">Park 5, State</a>
-         </div>
-      </div>
-
       <p class = "topParkHeader">Most Liked Parks</p>
       <div class = "discoverItem">
          <div class = "listParks">
-            <a href = "#">Park 1, State</a>
-            <a href = "#">Park 2, State</a>
-            <a href = "#">Park 3, State</a>
-            <a href = "#">Park 4, State</a>
-            <a href = "#">Park 5, State</a>
+            {% for park in top_liked_parks %}
+               <a href="{{ url_for('park_info', park_id = park._id)}}">{{park.park_name}}, {{park.state}}</a>
+            {% endfor %}
          </div>
       </div>
 
-      <p class = "topParkHeader">Best Rated Parks</p>
+      <p class = "topParkHeader">Top Rated Parks</p>
       <div class = "discoverItem">
          <div class = "listParks">
-            <a href = "#">Park 1, State</a>
-            <a href = "#">Park 2, State</a>
-            <a href = "#">Park 3, State</a>
-            <a href = "#">Park 4, State</a>
-            <a href = "#">Park 5, State</a>
+            {% for park in top_rated_parks %}
+               <a href="{{ url_for('park_info', park_id = park._id)}}">{{park.park_name}}, {{park.state}}</a>
+            {% endfor %}
+         </div>
+      </div>
+
+      <p class = "topParkHeader">Largest Parks</p>
+      <div class = "discoverItem">
+         <div class = "listParks">
+            {% for park in largest_parks %}
+               <a href="{{ url_for('park_info', park_id = park._id)}}">{{park.park_name}}, {{park.state}}</a>
+            {% endfor %}
          </div>
       </div>
    </div>

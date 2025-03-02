@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Search for National Parks{% endblock %}
+{% block header %}Search for National Parks{% endblock %}
+
+{% block content %}
+    <section class="my-parks">
+        <div id="searchContainer">
+            <h3>Find a park by name or state:</h3>
+            <form method="POST" action="{{ url_for('findParks') }}" >
+                <input type="text" id="searchInput" name="searchInput" placeholder="e.g. Yellowstone" required>
+                <p id="search-by">Search by:
+                <input type="radio" id="by_name" name="searchType" value="by_name" checked="checked">
+                    <label for="by_name">name</label>
+                <input type="radio" id="by_state" name="searchType" value="by_state">
+                    <label for="by_state">state</label>
+                </p>  
+                <div class="submitDiv">
+                    <button type="submit" value="submit" class="searchBtn">Search</button>
+                </div>
+            </form>
+          
+            <h3>Search Results</h3>
+            {% if docs %}
+                <p>Click on a park name to see more information about the park</p>
+                {% for doc in docs %}
+                    <div class="park-info">
+                        <hr>
+                        <p><a href="{{ url_for('park_info', park_id=doc._id) }}">
+                            <b>{{ doc.park_name }}</b>
+                        </a></p>
+                        <p><b>State: {{ doc.state }}</b></p>
+                        {% if docs.entrance_fee == True %}
+                            <div> <b>Entrance Fee:</b> Yes </div>
+                        {% else %}
+                            <div> <b>Entrance Fee:</b> No </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div><p>No parks found matching your search criteria.</p></div>
+            {% endif %}
+          </div>
+    </section>
+{% endblock %}

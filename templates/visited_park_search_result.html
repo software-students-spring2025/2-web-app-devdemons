@@ -1,28 +1,44 @@
-<link rel="stylesheet" href="../static/css/style.css"/>
 {% extends 'base.html' %}
 
 {% block title %}My National Parks - Visited Park Search Result{% endblock %}
 {% block header %}My National Parks{% endblock %}
 
 {% block content %}
-    {% if not user_id %}
-        <div>User ID not received</div>
-        <h2>Search Results</h2>
-    {% else %}
-        <h2>Search Results {{ user_id }}</h2>
-    {% endif %}
-    
-    {% if docs %}
-        {% for doc in docs %}
-            <div>
-                <hr class="solid">
-                <p><b>{{ doc.park_name }}</b></p>
-                <p><b>State: {{ doc.state }}</b></p>
-                <a href="{{ url_for('addVisitedPark', user_id=user_id, park_id=doc._id) }}">Add to My Visited Parks List</a>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>No parks found matching your search criteria.</p>
-    {% endif %}
-
+    <section class="my-parks">
+        <div id="searchContainer">
+            <h2>Add a National Park I have visited:</h2>
+            <p>Please find the park by name or state:</p>
+            <form method="POST" action="{{ url_for('searchVisitedPark') }}" >
+                <input type="text" id="searchInput" name="searchInput" placeholder="e.g. Yellowstone" required>
+                <p3 id="search-by">Search by:
+                <input type="radio" id="by_name" name="searchType" value="by_name" checked="checked">
+                    <label for="by_name">name</label>
+                <input type="radio" id="by_state" name="searchType" value="by_state">
+                    <label for="by_state">state</label>
+                </p3>  
+                <div class="submitDiv">
+                    <button type="submit" value="submit" class="searchBtn">Search</button>
+                </div>
+            </form>
+            {% if not user_id %}
+                <div>User ID not received</div>
+            {% else %}
+                <h3>Search Results</h3>
+                {% if docs %}
+                    {% for doc in docs %}
+                        <div class="park-info">
+                            <hr>
+                            <p><a href="{{ url_for('park_info', park_id=doc._id) }}">
+                                <b>{{ doc.park_name }}</b>
+                            </a></p>
+                            <p><b>State: {{ doc.state }}</b></p>
+                            <a href="{{ url_for('addVisitedPark', park_id=doc._id) }}">Add to My Visited Parks List</a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div><p>No parks found matching your search criteria.</p></div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </section>
 {% endblock %}
