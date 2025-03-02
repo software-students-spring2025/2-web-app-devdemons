@@ -18,8 +18,8 @@
         <div class="bar"></div>
       </button>
       <h1 id ="title">{% block header %} {% endblock %}</h1>
-      <a href="{{ url_for('search') }}" id="profileLink">
-        <img src="{{ url_for('static', filename='images/user.svg') }}" alt="Profile Icon" class="profileIcon">
+      <a href="{{ url_for('logout') }}" id="logoutLink">
+        <img src="{{ url_for('static', filename='images/logout.svg') }}" alt="Logout Icon" class="logoutIcon">
       </a>
     </div>
 
