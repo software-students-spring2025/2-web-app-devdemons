@@ -8,21 +8,22 @@
     <div><b>{{ docs.park_name }}</b></div>
     <div> {{ docs.state }}</div>
     <img src="{{ url_for('static', filename=docs.img_src) }}" style="height:500px;width:500px;" alt="{{docs.park_name}}"></img>
-    <div> <b>Size:</b> {{ docs.size }} </div>
-    <div> <b>Entrance Fee:</b> {{ docs.entrance_fee }} </div>
-
-{#
-
-    <div> <b>Rating:</b>{{ docs.rating }} </div>
-    <div> <b>Likes:</b>{{ docs.like }} </div>
-    <div><a  href="{{ url_for('liked')}}">Like this Park</a></div>
-    <div><a  href="{{ url_for('addPark', park_id=docs._id) }}">Add to Parks I've Visited</a></div>
-    <div class="comments">
+    <div> <b>Size:</b> {{ docs.size }} km2 </div>
+    {% if docs.entrance_fee == True %}
+    <div> <b>Entrance Fee:</b> Yes </div>
+    {% else %}
+    <div> <b>Entrance Fee:</b> No </div>
+    {% endif %}
+    <div><b>Description:</b> {{ docs.description }} </div>
+    <div> <b>Rating:</b> {{ docs.rating }} </div>
+    <div> <b>Likes:</b> {{ docs.likes }} </div>
+    <a href="{{ url_for('addVisitedPark', park_id=docs._id) }}">Add to My Visited Parks List</a>
+    <div>
         <b>Comments:</b>
-        <p>{{ docs.comment }}</p>
+        {% for c in docs.comments %}
+            <p>{{ c }}</p>
+        {% endfor %}
     </div>
 
-#}
 </section>
-
 {% endblock %}
