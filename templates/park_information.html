@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="../static/css/style.css"/>
 <section class="park-info">
     <h2>Park Information</h2>
-    <div><b>{{ docs.park_name }}</b></div>
+    <div id="park-name"><b>{{ docs.park_name }}</b></div>
     <div> {{ docs.state }}</div>
     <img src="{{ url_for('static', filename=docs.img_src) }}" style="height:500px;width:500px;" alt="{{docs.park_name}}"></img>
     <div> <b>Size:</b> {{ docs.size }} </div>
@@ -20,8 +20,14 @@
     <div><a  href="{{ url_for('addPark', park_id=docs._id) }}">Add to Parks I've Visited</a></div>
     <div class="comments">
         <b>Comments:</b>
-        <p>{{ docs.comment }}</p>
+        {% for comment in docs.comments %}
+        <div class="comment">
+            <span class="username">{{ comment.username }} :</span>
+            <p>{{ comment.text }}</p>
+        </div>
+        {% endfor %}
     </div>
+    
 
 #}
 </section>
