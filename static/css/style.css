@@ -1,5 +1,6 @@
 /* styling for the base page*/
 #navBar {
+   z-index: 1000;
    display: flex;
    align-items: center;
    justify-content: center;
@@ -85,6 +86,8 @@
    align-items: center;
    padding-top: 100px;
    padding-bottom: 15px;
+   width: 90%;
+   margin: 0 auto;
 }
 
 #searchInput {
@@ -114,12 +117,6 @@
    align-items: center;
    justify-content: space-between;
    width: 90%;
-}
-
-.submitDiv {
-   display: flex;
-   justify-content: center;
-   margin-top: 20px;
 }
 
 .searchBtn {
@@ -153,7 +150,7 @@ select {
 h2 {
    color: #28536B; 
    text-align: center;
-   padding-top: 100px; 
+   padding-top: 20px; 
  }
  
  form {
@@ -193,12 +190,7 @@ h2 {
  }
 
  /* Styling for the posts section */
-h2 {
-   color: #28536B; 
-   text-align: center;
-   padding-top: 100px; 
- }
- 
+
  section.posts {
    display: flex;
    flex-direction: column;
@@ -250,24 +242,6 @@ h2 {
  }
 
  /* Styling for the search page */
-#searchContainer {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   padding-top: 100px;
-   padding-bottom: 20px;
-   width: 90%; 
-   margin: 0 auto; 
-}
-
-#searchInput {
-   width: 300px; 
-   padding: 10px;
-   margin-bottom: 10px;
-   border: 2px solid #28536B; 
-   border-radius: 5px;
-   font-size: 16px; 
-}
 
 h3#advancedHeader {
    color: #28536B; 
@@ -310,6 +284,7 @@ select {
 }
 
 .submitDiv {
+   text-align: center;
    display: flex;
    justify-content: center;
    margin-top: 20px;
@@ -354,20 +329,6 @@ select {
    border-radius: 5px;
 }
 
-.submitDiv {
-   text-align: center;
-}
-
-.searchBtn {
-   color: #FFF;
-   background-color: #28536B;
-   border: none;
-   padding: 10px 20px;
-   border-radius: 5px;
-   cursor: pointer;
-   transition: background-color 0.3s;
-}
-
 .searchBtn:hover {
    background-color: #C2948A;
 } 
@@ -382,10 +343,12 @@ select {
    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.park-name {
-   font-size: 20px;
-   color: #28536B;
+#park-name {
+   font-size: 24px; 
+   color: #28536B; 
+   margin-top: 10px;
 }
+
 
 .park-rating p {
    margin: 5px 0;
@@ -401,29 +364,31 @@ select {
    text-decoration: underline;
 }
 
-.submitBtn {
-   padding: 10px 20px;           
-   background-color: #7EA8BE;    
-   color: #FFF;                 
-   border: none;                
-   border-radius: 5px;          
-   cursor: pointer;              
-   font-size: 16px;             
-   font-weight: bold;          
-   transition: background-color 0.3s; 
+.park-info img {
+   max-width: 100%;  
+   height: auto;    
+   display: block;   
+   margin: 0 auto;   
 }
 
-.submitBtn:hover {
-   background-color: #C2948A;   
+.comments .comment {
+   margin-bottom: 10px;
+}
+
+.comments .username {
+   font-weight: bold;
+   margin-right: 5px;
 }
 
 /* Container for the login form */
 .login-container {
    background: white;
    border: #C2948A;
-   padding: 40px;
+   padding: 10px;
    border-radius: 8px;
    width: 90%;
+   margin-left: auto;
+   margin-right: auto;
 }
 
 .login-container h2 {
@@ -435,6 +400,7 @@ select {
 
 #loginForm input[type="text"],
 #loginForm input[type="password"] {
+   width: 40%;
    padding: 10px;
    margin-bottom: 15px;
    border: 2px solid #ddd;
@@ -603,3 +569,36 @@ select {
 .listParks a:hover {
    color: darkgray;
 } 
+
+#createUserContainer .form-row {
+   display: flex;
+   flex-direction: column; 
+   margin-bottom: 15px; 
+}
+
+#createUserContainer label {
+   margin-bottom: 5px;  
+}
+
+#createUserContainer input {
+   width: 110%;  
+   padding: 10px;
+   border: 2px solid #ddd;
+   border-radius: 5px;
+   font-size: 16px;
+}
+
+.submitBtn {
+   padding: 10px 20px;
+   background-color: #7EA8BE;
+   color: white;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+   font-size: 16px;
+   font-weight: bold;
+}
+
+.submitBtn:hover {
+   background-color: #C2948A;  /* Change color on hover */
+}

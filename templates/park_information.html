@@ -3,9 +3,11 @@
 {% block title %}Park Information{% endblock %}
 {% block header %}Park Information{% endblock %}
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+
 <section class="park-info">
     <h2>Park Information</h2>
-    <div><b>{{ docs.park_name }}</b></div>
+    <div id="park-name"><b>{{ docs.park_name }}</b></div>
     <div> {{ docs.state }}</div>
     <img src="{{ url_for('static', filename=docs.img_src) }}" style="height:500px;width:500px;" alt="{{docs.park_name}}"></img>
     <div> <b>Size:</b> {{ docs.size }} km2 </div>
@@ -18,7 +20,7 @@
     <div> <b>Rating:</b> {{ docs.rating }} </div>
     <div> <b>Likes:</b> {{ docs.likes }} </div>
     <a href="{{ url_for('addVisitedPark', park_id=docs._id) }}">Add to My Visited Parks List</a>
-    <div>
+    <div class="comments">
         <b>Comments:</b>
         {% for comment in docs.comments %}
         <div class="comment">
@@ -26,6 +28,8 @@
         </div>
         {% endfor %}
     </div>
+    
+    
 
 </section>
 {% endblock %}
