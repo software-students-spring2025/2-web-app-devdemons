@@ -26,12 +26,13 @@
                 <h3>Search Results</h3>
                 {% if docs %}
                     {% for doc in docs %}
-                        <div class="park">
-                            <hr class="solid">
+                        <div class="park-info">
+                            <hr>
                             <p><a href="{{ url_for('park_info', park_id=doc._id) }}">
                                 <b>{{ doc.park_name }}</b>
                             </a></p>
                             <p><b>State: {{ doc.state }}</b></p>
+                            <a href="{{ url_for('addVisitedPark', park_id=doc._id) }}">Add to My Visited Parks List</a>
                         </div>
                     {% endfor %}
                 {% else %}
