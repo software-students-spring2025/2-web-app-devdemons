@@ -400,7 +400,7 @@ def create_app():
         if doc:
             app.logger.debug("* addVisitedPark(): Found 1 doc: %s", doc)
             db.user_parks.update_one({"_id": ObjectId(doc["_id"])},
-                                     {"$set": {"rating": int(user_rating),
+                                     {"$set": {"rating": int(user_rating) if user_rating else None,
                                                 "comment": user_comment,
                                                 "liked": user_liked,
                                                 "created_at": datetime.datetime.utcnow()}})   
@@ -460,7 +460,7 @@ def create_app():
             return render_template("error.html", error="Failed to find park: incorrect park_id")
 
         app.logger.debug("* parkInformation(): Found park_doc: %s", doc)
-        user_input = list(db.user_parks.find({'park_id': ObjectId(park_id)}, {'comment': 1, 'liked': 1, 'rating': 1}))
+        user_input = list(db.user_parks.find({'park_id': ObjectId(park_id)}, {'user_id':1,'comment': 1, 'liked': 1, 'rating': 1}))
         app.logger.debug("* parkInformation(): Found user_park docs: %s", user_input)
 
         doc['comments'] = []
@@ -472,15 +472,17 @@ def create_app():
             ct = len(user_input)
 
             for u in user_input:
+                username = db.users.find_one({"_id": ObjectId(u['user_id'])})
                 if u['comment'] != '':
-                    doc['comments'].append(u['comment'])
+                    doc['comments'].append(f"{username['username']}: {u['comment']}")
                 if u['liked'] == 'true':
                     doc['likes'] += 1
-                if u['rating'] != 'Not rated':
+                if u['rating'] != None:
                     mean += int(u['rating'])
 
             # Avoid division by zero
-            doc['rating'] = mean / ct if ct > 0 else 0
+            m = mean / ct if ct > 0 else 0
+            doc['rating'] = f'{m:.2f}'
 
             app.logger.debug("* parkInformation(): Compiled user info: %s", doc)
 
