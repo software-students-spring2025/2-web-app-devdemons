@@ -21,7 +21,7 @@
                 <br>
                 {% if docs and docs|length > 0 %}                       
                     {% for doc in docs %}
-                        <div class="park">
+                        <div class="park-info">
                             <p><a href="{{ url_for('park_info', park_id=doc.park_id) }}">
                                 <b>{{ doc.park_name }}</b>
                             </a></p>

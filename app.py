@@ -161,9 +161,44 @@ def create_app():
         Returns:
             rendered template (str): The rendered HTML template.
         """
-
-        return render_template("search.html", title="Search")
+        return render_template("search.html")
     
+
+    def findParksByRequest(request):
+        docs = []
+
+        search_input = request.form.get("searchInput", "").strip()
+        search_type = request.form.get("searchType", "").strip()
+
+        if search_input:  # Only search if input is provided
+            if search_type == "by_name":
+                app.logger.debug("* findParksByRequest(): search by name: %s", search_input)
+                docs = list(db.national_parks.find({"park_name": {"$regex": search_input, "$options": "i"}}))
+            elif search_type == "by_state":
+                app.logger.debug("* findParksByRequest(): search by state: %s", search_input)
+                docs = list(db.national_parks.find({"state": {"$regex": search_input, "$options": "i"}}))
+
+        return docs
+    
+
+    @app.route("/find-parks", methods=["POST"])
+    @login_required
+    def findParks():
+        """
+        Route for searching for any parks.
+        Returns:
+            rendered template (str): The rendered HTML template.
+        """
+        docs = findParksByRequest(request)
+
+        if docs:
+            app.logger.debug("* findParks(): Found documents: %s", docs)
+        else:
+            app.logger.debug("* findParks(): No documents found")
+
+        return render_template("find_parks_search_result.html", docs=docs, user_id = current_user.id)
+    
+
     @app.route("/discover")
     @login_required
     def discover():
@@ -172,7 +207,8 @@ def create_app():
         Returns:
             rendered template (str): The rendered HTML template.
         """
-        
+        app.logger.debug("* discover(): Route accessed")
+
         # filter for parks that have been liked and group by the park id to get total like count
         top_liked = list(db.user_parks.aggregate([
             {"$match": {"liked": "true"}},
@@ -215,7 +251,7 @@ def create_app():
     @login_required
     def visited():
         """
-        Route for the visited parks page.
+        Route for displaying my_visited_parks page.
         Returns:
             rendered template (str): The rendered HTML template.
         """
@@ -227,25 +263,16 @@ def create_app():
         else:
             for vdoc in visited_docs:
                 park_doc = db.national_parks.find_one({"_id": ObjectId(vdoc["park_id"])})
-                app.logger.debug("* addVisitedPark(): Found park_doc: %s", park_doc)
+                app.logger.debug("* visited(): Found park_doc: %s", park_doc)
                 vdoc["park_name"] = park_doc["park_name"]
                 vdoc["state"] = park_doc["state"]
                 vdoc["img_src"] = park_doc["img_src"]
-                app.logger.debug("* addVisitedPark(): Enriched visited_park_doc: %s", vdoc)
-            app.logger.debug("* addVisitedPark(): Found visited park docs: %s", visited_docs)
+                app.logger.debug("* visited(): Enriched visited_park_doc: %s", vdoc)
+            app.logger.debug("* visited(): Found visited park docs: %s", visited_docs)
 
-        # Redirect to the visited_parks page with all of user's visited parks
+        # Redirect to my_visited_parks page with all parks the user has visited
         return render_template("my_parks_visited.html", user_id=user_id, is_new_user="false", docs=visited_docs)
     
-    
-    # @app.route("/liked")
-    # def liked():
-    #     """
-    #     Route for the liked parks page.
-    #     Returns:
-    #         rendered template (str): The rendered HTML template.
-    #     """
-    #     return render_template("my_parks_liked.html")
     
     @app.route("/add-park")
     @login_required
@@ -268,18 +295,8 @@ def create_app():
         app.logger.debug("* searchVisitedPark(): request.form: %s", request.form)
         app.logger.debug("* searchVisitedPark(): user_id: %s", current_user.id)
         
-        search_input = request.form.get("searchInput", "").strip()
-        search_type = request.form.get("searchType", "").strip()
-
-        docs = []
-        if search_input:  # Only search if input is provided
-            if search_type == "by_name":
-                app.logger.debug("* searchVisitedPark(): search by name: %s", search_input)
-                docs = list(db.national_parks.find({"park_name": {"$regex": search_input, "$options": "i"}}))
-            elif search_type == "by_state":
-                app.logger.debug("* searchVisitedPark(): search by state: %s", search_input)
-                docs = list(db.national_parks.find({"state": {"$regex": search_input, "$options": "i"}}))
-
+        docs = findParksByRequest(request)
+        
         if docs:
             app.logger.debug("* searchVisitedPark(): Found documents: %s", docs)
         else:
@@ -383,7 +400,7 @@ def create_app():
         if doc:
             app.logger.debug("* addVisitedPark(): Found 1 doc: %s", doc)
             db.user_parks.update_one({"_id": ObjectId(doc["_id"])},
-                                     {"$set": {"rating": user_rating,
+                                     {"$set": {"rating": int(user_rating),
                                                 "comment": user_comment,
                                                 "liked": user_liked,
                                                 "created_at": datetime.datetime.utcnow()}})   
@@ -469,6 +486,7 @@ def create_app():
 
         return render_template("park_information.html", docs=doc)
 
+
     @app.errorhandler(Exception)
     def handle_error(e):
         """
@@ -489,127 +507,3 @@ if __name__ == "__main__":
     print(f"FLASK_ENV: {FLASK_ENV}, FLASK_PORT: {FLASK_PORT}")
 
     app.run(debug=True, port=FLASK_PORT)
-
-
-'''
-import datetime
-from flask import Flask, render_template, request, redirect, url_for
-import pymongo
-from dotenv import load_dotenv, dotenv_values
-
-load_dotenv()  # load environment variables from .env file
-
-
-def create_app():
-    """
-    Create and configure the Flask application.
-    returns: app: the Flask application object
-    """
-
-    app = Flask(__name__)
-    # load flask config from env variables
-    config = dotenv_values()
-    app.config.from_mapping(config)
-
-    cxn = pymongo.MongoClient(os.getenv("MONGO_URI"))
-    db = cxn[os.getenv("MONGO_DBNAME")]
-
-    try:
-        cxn.admin.command("ping")
-        print(" *", "Connected to MongoDB!")
-    except Exception as e:
-        print(" * MongoDB connection error:", e)
-
-    @app.route("/")
-    def home():
-        """
-        Route for the home page.
-        Returns:
-            rendered template (str): The rendered HTML template.
-        """
-        docs = db.messages.find({}).sort("created_at", -1)
-        return render_template("index.html", docs=docs)
-
-    @app.route("/create", methods=["POST"])
-    def create_post():
-        """
-        Route for POST requests to the create page.
-        Accepts the form submission data for a new document and saves the document to the database.
-        Returns:
-            redirect (Response): A redirect response to the home page.
-        """
-        name = request.form["fname"]
-        message = request.form["fmessage"]
-
-        doc = {
-            "name": name,
-            "message": message,
-            "created_at": datetime.datetime.utcnow(),
-        }
-        db.messages.insert_one(doc)
-
-        return redirect(url_for("home"))
-
-    @app.route("/edit/<post_id>")
-    def edit(post_id):
-        """
-        Route for GET requests to the edit page.
-        Displays a form users can fill out to edit an existing record.
-        Args:
-            post_id (str): The ID of the post to edit.
-        Returns:
-            rendered template (str): The rendered HTML template.
-        """
-        doc = db.messages.find_one({"_id": ObjectId(post_id)})
-        return render_template("edit.html", doc=doc)
-
-    @app.route("/edit/<post_id>", methods=["POST"])
-    def edit_post(post_id):
-        """
-        Route for POST requests to the edit page.
-        Accepts the form submission data for the specified document and updates the document in the database.
-        Args:
-            post_id (str): The ID of the post to edit.
-        Returns:
-            redirect (Response): A redirect response to the home page.
-        """
-        name = request.form["fname"]
-        message = request.form["fmessage"]
-
-        doc = {
-            "name": name,
-            "message": message,
-            "created_at": datetime.datetime.utcnow(),
-        }
-
-        db.messages.update_one({"_id": ObjectId(post_id)}, {"$set": doc})
-
-        return redirect(url_for("home"))
-
-    @app.route("/delete/<post_id>")
-    def delete(post_id):
-        """
-        Route for GET requests to the delete page.
-        Deletes the specified record from the database, and then redirects the browser to the home page.
-        Args:
-            post_id (str): The ID of the post to delete.
-        Returns:
-            redirect (Response): A redirect response to the home page.
-        """
-        db.messages.delete_one({"_id": ObjectId(post_id)})
-        return redirect(url_for("home"))
-
-    @app.route("/delete-by-content/<post_name>/<post_message>", methods=["POST"])
-    def delete_by_content(post_name, post_message):
-        """
-        Route for POST requests to delete all post by their author's name and post message.
-        Deletes the specified record from the database, and then redirects the browser to the home page.
-        Args:
-            post_name (str): The name of the author of the post.
-            post_message (str): The contents of the message of the post.
-        Returns:
-            redirect (Response): A redirect response to the home page.
-        """
-        db.messages.delete_many({"name": post_name, "message": post_message})
-        return redirect(url_for("home"))
-'''
