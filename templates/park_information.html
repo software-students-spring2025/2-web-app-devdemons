@@ -20,8 +20,10 @@
     <a href="{{ url_for('addVisitedPark', park_id=docs._id) }}">Add to My Visited Parks List</a>
     <div>
         <b>Comments:</b>
-        {% for c in docs.comments %}
-            <p>{{ c }}</p>
+        {% for comment in docs.comments %}
+        <div class="comment">
+            <p>{{ comment }}</p>
+        </div>
         {% endfor %}
     </div>
 
