@@ -227,7 +227,7 @@ def create_app():
 
         # filter for parks that are top rated and group by average rating
         top_rated = list(db.user_parks.aggregate([
-            {"$match": {"rating": {"$ne": "Not rated"}}},
+            {"$match": {"rating": {"$ne": "Not Rated"}}},
             {"$group": {"_id": "$park_id", "avg_rating": {"$avg": {"$convert": {"input": "$rating", "to": "double"}}}}},
             {"$sort": {"avg_rating": -1}},
             {"$limit": 5}
@@ -337,7 +337,7 @@ def create_app():
                 "user_id": ObjectId(user_id),
                 "park_id": ObjectId(park_id),
                 "visited": "true",
-                "rating": "Not rated",
+                "rating": "Not Rated",
                 "comment": "",
                 "liked": "false",
                 "created_at": datetime.datetime.utcnow(),
