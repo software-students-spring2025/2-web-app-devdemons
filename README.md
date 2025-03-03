@@ -49,6 +49,7 @@ Park Passport is an application that allows users to explore and share their exp
 4. Go to [http://127.0.0.1:10000/](http://127.0.0.1:10000/) (or to the correct port if you changed it)
 
 5. You have now successfully loaded our app! You can create an account, add parks to your list, and explore. Or you can login using one of these pre-existing accounts with the following username and password:
+
    Account 1
 
    - Username: test1
