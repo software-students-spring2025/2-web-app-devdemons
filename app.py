@@ -400,7 +400,7 @@ def create_app():
         if doc:
             app.logger.debug("* addVisitedPark(): Found 1 doc: %s", doc)
             db.user_parks.update_one({"_id": ObjectId(doc["_id"])},
-                                     {"$set": {"rating": int(user_rating) if user_rating else None,
+                                     {"$set": {"rating": int(user_rating) if user_rating else 'Not Rated',
                                                 "comment": user_comment,
                                                 "liked": user_liked,
                                                 "created_at": datetime.datetime.utcnow()}})   
@@ -477,7 +477,7 @@ def create_app():
                     doc['comments'].append(f"{username['username']}: {u['comment']}")
                 if u['liked'] == 'true':
                     doc['likes'] += 1
-                if u['rating'] != None:
+                if u['rating'] != 'Not Rated':
                     mean += int(u['rating'])
 
             # Avoid division by zero

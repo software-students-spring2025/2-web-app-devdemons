@@ -36,18 +36,24 @@ Park Passport is an application that allows users to explore and share their exp
 
 ## Steps necessary to run the software
 
-See instructions. Delete this line and place instructions to download, configure, and run the software here.
 
-Two files are necessary to load our app and be able to run it. First, create your own .env file. Included in our repository is an env.example file. Most of the lines are filled in, but you must put a MongoDB database name and uri in the  firsttwo lines. You also must create a Flask Login secret key to place in the last line. Once the .env file is set up, you have to go and fill out a few lines in the docker-compose.yml file to match. You must make sure the ports math up and fill in the MongoDb environment variables to match what is in your .env file. under services -> flask-app -> environment change MONGO_DBNAME and MONGO_URI to your own links and then under mongodb -> environment change the MONGO_INITDB_ROOT_USERNAME and MONGO_INITDB_ROOT_PASSWORD to the correct values for you. From there you should be ready to run the flask app.
+1. Clone our git repository to your local machine. You can use this [link](https://github.com/software-students-spring2025/2-web-app-devdemons.git) 
 
-In the terminal type docker compose up --force-recreate --build and then go to the correct address according to the ports you set up. You should then be seeing our login page and can create an account and go through our app. 
+2. Find the .env and docker-compose.yml files sent by my team member in the class discord under the channel [team-devdemons](https://discord.com/channels/1198812317274615830/1342293481808199750)
+    * Copy these files into the local version of your repository
 
+3. Bring up a terminal window and type in the following command: ```docker compose up --force-recreate --build```
+    * If you get a message saying the port is in use you can change the port in the .env and docker compose files
 
+4. Go to [http://127.0.0.1:10000/](http://127.0.0.1:10000/) (or to the correct port if you changed it)
 
+5. You have now successfully loaded our app! You can create an account, add parks to your list, and explore. 
+    * We have included some test information that is automatically loaded into the database at startup. To view these comments you could look at the pages for parks like Yellowstone or Acadia to see how other users' comments and ratings are displayed publically   
 
-
+6. If you edit anything while the site is running it will not appear. To load all changes, open a new terminal window and type ```docker compose down``` and then redo step 3 in the other terminal window. 
+    * Any information you added to the db will be lost each time the site is rebuilt and launched. 
 
 ## Task boards
 
-[Sprint 1](https://github.com/orgs/software-students-spring2025/projects/27/views/1)
+[Sprint 1](https://github.com/orgs/software-students-spring2025/projects/27/views/1) \
 [Sprint 2](https://github.com/orgs/software-students-spring2025/projects/72/views/1?filterQuery=)
