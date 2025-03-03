@@ -24,8 +24,7 @@
         <b>Comments:</b>
         {% for comment in docs.comments %}
         <div class="comment">
-            <span class="username">{{ comment.username }} says:</span>
-            <p>{{ comment.text }}</p>
+            <p>{{ comment }}</p>
         </div>
         {% endfor %}
     </div>
