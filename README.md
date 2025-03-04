@@ -67,5 +67,5 @@ Park Passport is an application that allows users to explore and share their exp
 
 ## Task boards
 
-[Sprint 1](https://github.com/orgs/software-students-spring2025/projects/27/views/1) \
-[Sprint 2](https://github.com/orgs/software-students-spring2025/projects/72/views/1?filterQuery=)
+[Sprint 1](https://github.com/orgs/software-students-spring2025/projects/27) 
+[Sprint 2](https://github.com/orgs/software-students-spring2025/projects/72)

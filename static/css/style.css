@@ -365,7 +365,8 @@ select {
 }
 
 .park-info img {
-   max-width: 100%;  
+   max-width: 70%; 
+   max-height: fit-content; 
    height: auto;    
    display: block;   
    margin: 0 auto;   
@@ -601,4 +602,18 @@ select {
 
 .submitBtn:hover {
    background-color: #C2948A;  /* Change color on hover */
+}
+
+.ratings {
+   display: flex;
+   align-items: center;
+   justify-content: space-between; 
+   flex-wrap: nowrap; 
+   width: 100%; 
+   padding: 0 10px; 
+}
+
+.ratings label, .ratings input {
+   margin: 0 5px; 
+   white-space: nowrap; 
 }

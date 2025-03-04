@@ -11,6 +11,7 @@
               <p><b>{{ doc.park_name }}</b></p>
               <p><b>State:</b> {{ doc.state }}</p>
               <p><b>Rating:</b>
+              <div class="ratings">
               <label for="rating1">1</label>
               {% if doc.rating == 1 %}
                 <input type="radio" id="rating1" name="rating" value="1" checked>
@@ -53,6 +54,7 @@
               {% else %}
                 <input type="radio" id="rating5" name="rating" value="5">
               {% endif %}
+              </div>
             </p>
 
             <p><b>Liked:</b>
